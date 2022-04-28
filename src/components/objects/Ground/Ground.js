@@ -25,7 +25,7 @@ class Ground extends Group {
         let texture = parent.loader.load( "assets/textures/grasslight-big.jpg" );
 
         material.map = texture;
-
+        parent.addToCollisionList(this);
     }
 }
 
