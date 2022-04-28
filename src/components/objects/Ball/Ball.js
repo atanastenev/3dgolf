@@ -8,6 +8,7 @@ class Ball extends Group {
     constructor(parent) {
         // Call parent Group() constructor
         super();
+
         // name? idk what for
         this.name = 'Ball';
 
@@ -36,7 +37,7 @@ class Ball extends Group {
 
         // dk if this is necessary
         // let gravity = new THREE.Vector3(0,-9.8*this.mass,0);
-        // this.addForce(gravity)
+        // this.setForce(gravity)
 
         // used to handle collisions
         parent.addToUpdateList(this);
@@ -70,10 +71,22 @@ class Ball extends Group {
         let dt = 18 / 1000;
         let newPosition = this.position.clone();
 
+        let gravity = new THREE.Vector3(0,-9.8*this.mass,0);
+
+        const DRAG = 8
+        if(this.velocity.lengthSq()>0){
+            let friction = this.velocity.clone().multiplyScalar(-DRAG);
+            this.setForce(gravity.add(friction));
+        }
+        else{
+            this.setForce(gravity);
+        }
+
         // n-body integration method
         newPosition.addScaledVector(this.velocity,dt);
         this.position.copy(newPosition);
         this.velocity.addScaledVector(this.netForce,dt/this.mass);
+
 
         // change velocity with wasd
         if (this.controller["KeyA"].pressed){
@@ -97,10 +110,13 @@ class Ball extends Group {
         let floorPosition = floor.mesh.position.y;
         const EPS = .001;
         if(this.position.y<floorPosition+this.radius+EPS){
+
             let newPosition = new THREE.Vector3(this.position.x,floorPosition+this.radius+EPS,this.position.z)
             this.position.copy(newPosition);
             this.mesh.position.copy(this.position);
-            if(this.velocity.lengthSq()<.5){
+
+
+            if(this.velocity.y**2<.4){
                 this.velocity= new THREE.Vector3(this.velocity.x,0,this.velocity.z);
             }
             else{
@@ -111,8 +127,8 @@ class Ball extends Group {
     }
 
     // helper functions
-    addForce(force){
-        this.netForce.add(force);
+    setForce(force){
+        this.netForce=force;
     }
 
     addVelocity(velocity){
