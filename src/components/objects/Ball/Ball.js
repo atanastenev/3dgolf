@@ -11,6 +11,7 @@ class Ball extends Group {
 
         // name? idk what for
         this.name = 'Ball';
+        this.strokeCount = 0;
 
         // size of ball
         this.radius = .1;
@@ -43,7 +44,8 @@ class Ball extends Group {
         // this.setForce(gravity)
 
         this.launchDirection = new THREE.Vector3(1,0,0);
-        this.launchPower = 0.1;
+        // this.launchPower = 0.1;
+        this.startLaunch = null;
 
         let points = [];
         points.push(this.ball.position);
@@ -123,22 +125,6 @@ class Ball extends Group {
         if (this.controller["KeyD"].pressed){
             this.launchDirection.applyAxisAngle(new THREE.Vector3(0, 1, 0), -0.0872665);
         }
-        if (this.controller["KeyW"].pressed){
-            this.launchPower+=.1;
-        }
-        if (this.controller["KeyS"].pressed){
-            this.launchPower-=.1;
-        }
-        // add a counter for number of strokes, only allow when ball has stopped moving
-        // maybe do a press and hold for the power
-        // wrong location, shouldn't be checking every timeStamp
-        if(this.controller["Space"].pressed){
-            console.log(this.launchDirection);
-            console.log(this.launchPower);
-            this.addVelocity(this.launchDirection.multiplyScalar(this.launchPower));
-            this.launchDirection = new THREE.Vector3(1, 0, 0);
-            this.launchPower = 0.1;
-        }
 
         // check if moving
         if(this.velocity.x**2+this.velocity.z**2 > 0.0005){
@@ -156,8 +142,8 @@ class Ball extends Group {
             this.startTime = null;
         }
 
-        // both not moving and not falling
-        if(!this.isFalling && !this.isMoving && timeStamp-this.startTime > 200){
+        // both not moving and not falling for longer than 200ms
+        if(!this.isFalling && !this.isMoving && timeStamp-this.startTime > 150){
             this.line.material.opacity=1;
             let newpoints = [];
             newpoints.push(this.ball.position);
@@ -169,10 +155,25 @@ class Ball extends Group {
                 10, //Roundness of Tube
                 false //closed
             );
+            // start launch power for 
+            if(this.controller["Space"].pressed && this.startLaunch ===null){
+                this.startLaunch = timeStamp;
+            }
+            // launch ball
+            if(!this.controller["Space"].pressed && this.startLaunch !==null){
+                let launchPower = 10*Math.sin((timeStamp-this.startLaunch)/ 300)+0.1;
+                this.addVelocity(this.launchDirection.clone().multiplyScalar(launchPower));
+
+                this.startLaunch = null;
+                this.strokeCount +=1;
+            }
+
         }
         else{
             this.line.material.opacity=0;
         }
+
+
 
     }
 

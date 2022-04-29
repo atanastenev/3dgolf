@@ -31,6 +31,7 @@ class Ground extends Group {
 
         this.mesh = new THREE.Mesh(geometry, materials);
         this.mesh.position.y = 0;
+
         this.mesh.rotation.x = -Math.PI / 2;
         this.mesh.receiveShadow = true;
 
