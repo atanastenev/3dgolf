@@ -33,7 +33,8 @@ class CourseScene extends Scene {
         // golf ball
         const ball = new Ball(this);
         // current floor with ugly texture lol
-        const ground = new Ground(this);
+        // (x,y,z, xSquares,zSquares, xRotate, zRotate)
+        const ground = new Ground(this, 0,0,0,     2,5,      -Math.PI*90/180,0);
         // idk why the shadows aren't working
         const lights = new BasicLights();
         // actually add to the scene

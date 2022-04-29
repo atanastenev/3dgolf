@@ -43,8 +43,10 @@ class Ball extends Group {
         // let gravity = new THREE.Vector3(0,-9.8*this.mass,0);
         // this.setForce(gravity)
 
+        // use for launching
         this.launchDirection = new THREE.Vector3(1,0,0);
-        // this.launchPower = 0.1;
+        // implement later
+        this.floorDirection = new THREE.Vector3(0,1,0);
         this.startLaunch = null;
 
         let points = [];
@@ -121,9 +123,13 @@ class Ball extends Group {
         if (this.controller["KeyA"].pressed){
             // this.velocity.add(new THREE.Vector3(.5, 0, 0));
             this.launchDirection.applyAxisAngle(new THREE.Vector3(0, 1, 0), 0.0872665);
+            // this is extra to make things look nice (makes launch on the plane)
+            this.launchDirection.projectOnPlane(this.floorDirection).normalize();
         }
         if (this.controller["KeyD"].pressed){
             this.launchDirection.applyAxisAngle(new THREE.Vector3(0, 1, 0), -0.0872665);
+            // this is extra to make things look nice (makes launch on the plane)
+            this.launchDirection.projectOnPlane(this.floorDirection).normalize();
         }
 
         // check if moving
@@ -141,7 +147,6 @@ class Ball extends Group {
         else if(this.isFalling || this.isMoving){
             this.startTime = null;
         }
-
         // both not moving and not falling for longer than 200ms
         if(!this.isFalling && !this.isMoving && timeStamp-this.startTime > 150){
             this.line.material.opacity=1;
@@ -162,6 +167,7 @@ class Ball extends Group {
             // launch ball
             if(!this.controller["Space"].pressed && this.startLaunch !==null){
                 let launchPower = 10*Math.sin((timeStamp-this.startLaunch)/ 300)+0.1;
+                // let launchPower = 10;
                 this.addVelocity(this.launchDirection.clone().multiplyScalar(launchPower));
 
                 this.startLaunch = null;
@@ -174,30 +180,47 @@ class Ball extends Group {
         }
 
 
-
     }
 
     // my floor collision from assignment 5 with some extra
     handleCollision(floor){
-        let floorPosition = floor.mesh.position.y;
-        const EPS = .001;
+        // old iteration of floor position
+        // let floorPosition = floor.mesh.position.y;
+
+        // use equation of a plane
+        let d = floor.normal.dot(floor.mesh.position);
+        let floorPosition = (d-(this.ball.position.x*floor.normal.x+this.ball.position.z*floor.normal.z))/floor.normal.y;
+
+        const EPS = 0.001;
         // in floor
         if(this.ball.position.y<floorPosition+this.radius+EPS){
-            this.isFalling = false;
+            // maybe add later
+            this.floorDirection = floor.normal;
             let newPosition = new THREE.Vector3(this.ball.position.x,floorPosition+this.radius+EPS,this.ball.position.z)
             this.ball.position.copy(newPosition);
 
             // stops the infinite bouncing
-            if(this.velocity.y**2<.85){
-                this.velocity= new THREE.Vector3(this.velocity.x,0,this.velocity.z);
+            // the second condition helps with rolling on slopes without bouncing
+            if(this.velocity.y**2<2){
+                // this.velocity.projectOnPlane(floor.normal);
+                this.velocity = new THREE.Vector3(this.velocity.x,0,this.velocity.z);
             }
-            else{
+            // factor of 100 should prob depend on the normal of the plane
+            else if (this.isFalling){
+                // fix bounce, should bounce in direction of plane
                 this.velocity= new THREE.Vector3(this.velocity.x,this.velocity.y*-.7,this.velocity.z);
             }
-            
+
+            if(this.isMoving){
+                this.velocity.projectOnPlane(floor.normal);
+            }
+
+            this.isFalling = false;
         }
-        if(this.ball.position.y>floorPosition+this.radius+EPS){
+        const EPS2 = 0.01
+        if(this.ball.position.y>floorPosition+this.radius+EPS2){
             this.isFalling = true;
+            this.floorDirection = new THREE.Vector3(0,1,0);
         }
     }
 
