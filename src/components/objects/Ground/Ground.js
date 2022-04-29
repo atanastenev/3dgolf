@@ -9,10 +9,10 @@ class Ground extends Group {
         // Call parent Group() constructor
         super();
 
-        let segments = 10
+        let segments = 5
 
         let materialEven = new THREE.MeshBasicMaterial({color: 0x32a852,});
-        let materialOdd = new THREE.MeshBasicMaterial({color: 0x1c802c,});
+        let materialOdd = new THREE.MeshBasicMaterial({color: 0x000000,});
     
         let materials = [materialEven,materialOdd];
 
