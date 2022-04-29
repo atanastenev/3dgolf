@@ -37,7 +37,7 @@ class CourseScene extends Scene {
         // idk why the shadows aren't working
         const lights = new BasicLights();
         // actually add to the scene
-        this.add(lights, ball.mesh, ground.mesh);
+        this.add(lights, ball.ball, ball.line);
 
         // Populate GUI
         this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
