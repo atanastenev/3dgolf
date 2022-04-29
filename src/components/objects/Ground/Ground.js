@@ -9,22 +9,31 @@ class Ground extends Group {
         // Call parent Group() constructor
         super();
 
-        let material = new THREE.MeshStandardMaterial({
-            color: 0x32a852, //0x3c3c3c,
-            // specular: 0x404761, //0x3c3c3c//,
-            // metalness: 0.9,
-        });
+        let segments = 10
+
+        let materialEven = new THREE.MeshBasicMaterial({color: 0x32a852,});
+        let materialOdd = new THREE.MeshBasicMaterial({color: 0x1c802c,});
     
+        let materials = [materialEven,materialOdd];
+
         // ground mesh
-        let geometry = new THREE.PlaneBufferGeometry(100, 100)
-        this.mesh = new THREE.Mesh(geometry, material);
+        let geometry = new THREE.PlaneGeometry(segments*2,segments*2,segments,segments);
+
+        for(let i = 0; i < segments; i++){
+            for(let j = 0; j < segments; j++){
+                let index = 2*(i*segments+j);
+                geometry.faces[index].materialIndex = (i+j)%2
+                geometry.faces[index+1].materialIndex = (i+j)%2
+            }
+        }
+        // geometry.faces[1].materialIndex = 0;
+
+
+        this.mesh = new THREE.Mesh(geometry, materials);
         this.mesh.position.y = 0;
         this.mesh.rotation.x = -Math.PI / 2;
         this.mesh.receiveShadow = true;
 
-        let texture = parent.loader.load( "assets/textures/grasslight-big.jpg" );
-
-        material.map = texture;
         parent.addToCollisionList(this);
     }
 }

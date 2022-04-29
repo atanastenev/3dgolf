@@ -117,7 +117,7 @@ class Ball extends Group {
         // change velocity with wasd
         // prob set the angle with constant
         if (this.controller["KeyA"].pressed){
-            this.velocity.add(new THREE.Vector3(.5, 0, 0));
+            // this.velocity.add(new THREE.Vector3(.5, 0, 0));
             this.launchDirection.applyAxisAngle(new THREE.Vector3(0, 1, 0), 0.0872665);
         }
         if (this.controller["KeyD"].pressed){
@@ -161,7 +161,7 @@ class Ball extends Group {
             this.line.material.opacity=1;
             let newpoints = [];
             newpoints.push(this.ball.position);
-            newpoints.push( this.ball.position.clone().add(this.launchDirection));
+            newpoints.push(this.ball.position.clone().add(this.launchDirection));
             this.line.geometry = new THREE.TubeGeometry(
                 new THREE.CatmullRomCurve3(newpoints),
                 500,// path segments
