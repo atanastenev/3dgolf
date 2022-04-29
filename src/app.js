@@ -9,6 +9,8 @@
 import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { CourseScene } from 'scenes';
+import './instructions.css';
+import INSTRUCTION_HTML from './instructions.html';
 
 // Initialize core ThreeJS components
 const scene = new CourseScene();
@@ -35,6 +37,19 @@ controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
+
+// ideas from https://github.com/mrdoob/three.js/blob/master/examples/misc_controls_pointerlock.html
+// https://github.com/karenying/drivers-ed/blob/master/src/app.js
+let instructionsContainer = document.createElement('div');
+instructionsContainer.id = 'instructions-container';
+instructionsContainer.innerHTML = INSTRUCTION_HTML
+document.body.appendChild(instructionsContainer)
+
+// hide instruction on mouseclick
+window.addEventListener( 'click', function () {
+    hideInstructions()
+} );
+
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
@@ -53,3 +68,14 @@ const windowResizeHandler = () => {
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
+
+// adapted from: https://github.com/efyang/portal-0.5/blob/main/src/instructions.html
+function hideInstructions() {
+    let instructionsContainer = document.getElementById('instructions-container')
+    if (instructionsContainer.style.display !== 'none') {
+        instructionsContainer.style.opacity = '0'
+        setTimeout(() => {
+            instructionsContainer.style.display = 'none'
+        }, 2000)
+    }
+}

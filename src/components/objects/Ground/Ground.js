@@ -9,11 +9,19 @@ class Ground extends Group {
         // Call parent Group() constructor
         super();
 
+<<<<<<< HEAD
         // size of square
         let squareSize = 2;
         // checkerboard color
         let materialEven = new THREE.MeshBasicMaterial({color: 0x32a852,});
         let materialOdd = new THREE.MeshBasicMaterial({color: 0x1c802c,});
+=======
+        let segments = 5
+
+        let materialEven = new THREE.MeshBasicMaterial({color: 0x32a852,});
+        let materialOdd = new THREE.MeshBasicMaterial({color: 0x000000,});
+    
+>>>>>>> 1275e16feff054fa3b44f764efa99135bc05c715
         let materials = [materialEven,materialOdd];
 
         // ground mesh
