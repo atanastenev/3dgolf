@@ -12,6 +12,7 @@ class Ball extends Group {
         // name? idk what for
         this.name = 'Ball';
         this.strokeCount = 0;
+        this.success = false;
 
         // size of ball
         this.radius = .1;
@@ -66,7 +67,11 @@ class Ball extends Group {
              opacity: 0
         } );
 
+        // aim line
         this.line = new THREE.Line(tubeGeometry, lineMaterial);
+        
+        // hole test
+        this.inHole = false;
 
         // used to handle collisions
         parent.addToUpdateList(this);
@@ -96,6 +101,8 @@ class Ball extends Group {
     }
 
     update(timeStamp) {
+        if(this.success) return;
+
         // value from assignment 5
         let dt = 18 / 1000;
         let newPosition = this.ball.position.clone();
@@ -149,6 +156,11 @@ class Ball extends Group {
         }
         // both not moving and not falling for longer than 200ms
         if(!this.isFalling && !this.isMoving && timeStamp-this.startTime > 150){
+            // check if in hole!
+            if(this.inHole){
+                this.success = true;
+                return;
+            }
             this.line.material.opacity=1;
             let newpoints = [];
             newpoints.push(this.ball.position);
@@ -166,8 +178,8 @@ class Ball extends Group {
             }
             // launch ball
             if(!this.controller["Space"].pressed && this.startLaunch !==null){
-                let launchPower = 5*Math.sin(2*Math.PI*(timeStamp-this.startLaunch)/ 5000)+5.1;
-                // let launchPower = 10;
+                // let launchPower = -5*Math.cos(2*Math.PI*(timeStamp-this.startLaunch)/ 5000)+5.1;
+                let launchPower = 2;
                 this.addVelocity(this.launchDirection.clone().multiplyScalar(launchPower));
 
                 this.startLaunch = null;
@@ -196,14 +208,26 @@ class Ball extends Group {
         let floorPosition = (d-(this.ball.position.x*floor.normal.x+this.ball.position.z*floor.normal.z))/floor.normal.y;
 
         // try to make hole test
-        let inHole = false;
+        const EPShole = 0.001
         if(floor.hasHole){
-            if(this.ball.position.distanceTo(floor.hole.circle.position)<floor.hole.radius+0.01){
-                floorPosition -= .2;
-                inHole = true;
+            if(this.inHole){
+                floorPosition -=.2;
+            }
+            // check if ball ontop of hole
+            if((this.ball.position.y-floor.hole.circle.position.y)**2<=(this.radius+.2)**2+EPShole){
+                if((this.ball.position.x-floor.hole.circle.position.x)**2+(this.ball.position.z-floor.hole.circle.position.z)**2
+                    <(floor.hole.radius+EPShole)**2){     
+                        if(!this.inHole) floorPosition -= .2;
+                        this.inHole = true;
+                }
+                else if (this.inHole){
+                    this.inHole = false;
+                    let reflectVector = floor.hole.circle.position.clone().sub(this.ball.position).normalize();
+                    this.velocity.reflect(reflectVector);
+                }
             }
             else{
-                inHole = false;
+                this.inHole = false;
             }
         }
 
