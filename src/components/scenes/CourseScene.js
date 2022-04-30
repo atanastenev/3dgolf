@@ -2,7 +2,7 @@ import * as Dat from 'dat.gui';
 import * as THREE from 'three';
 import { Scene, Color } from 'three';
 // remove flower and land
-import { Ball, Ground, Flower, Land } from 'objects';
+import { Ball, Ground } from 'objects';
 import { BasicLights } from 'lights';
 
 class CourseScene extends Scene {
@@ -34,11 +34,14 @@ class CourseScene extends Scene {
         const ball = new Ball(this);
         // current floor with ugly texture lol
         // (x,y,z, xSquares,zSquares, xRotate, zRotate)
-        const ground = new Ground(this, 0,0,0,     2,5,      -Math.PI*90/180,0);
+        const ground = new Ground(this, 0,0,0,     3,5,      -Math.PI*90/180,0,      1,1);
         // idk why the shadows aren't working
         const lights = new BasicLights();
         // actually add to the scene
         this.add(lights, ball.ball, ball.line, ground.mesh);
+        if(ground.hasHole){
+            this.add(ground.hole.circle);
+        }
 
         // Populate GUI
         this.state.gui.add(this.state, 'rotationSpeed', -5, 5);

@@ -44,7 +44,7 @@ class Ball extends Group {
         // this.setForce(gravity)
 
         // use for launching
-        this.launchDirection = new THREE.Vector3(0,0,1);
+        this.launchDirection = new THREE.Vector3(1,0,0);
         // implement later
         this.floorDirection = new THREE.Vector3(0,1,0);
         this.startLaunch = null;
@@ -194,6 +194,18 @@ class Ball extends Group {
         // use equation of a plane
         let d = floor.normal.dot(floor.mesh.position);
         let floorPosition = (d-(this.ball.position.x*floor.normal.x+this.ball.position.z*floor.normal.z))/floor.normal.y;
+
+        if(floor.hasHole){
+            let ballCoord = this.ball.position.clone().projectOnPlane(new THREE.Vector3(0,1,0));
+            if(ballCoord.distanceTo(floor.hole.circle.position.clone().projectOnPlane(new THREE.Vector3(0,1,0)))<floor.hole.radius+0.01){
+                floorPosition -= this.radius;
+                return;
+            }
+        }
+
+        if(this.ball.position.y<floorPosition-this.radius){
+            return;
+        }
 
         const EPS = 0.001;
         // in floor

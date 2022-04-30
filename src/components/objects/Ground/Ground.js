@@ -1,13 +1,20 @@
 import { Group } from 'three';
 import * as THREE from 'three';
+import {Hole} from 'objects'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
-// import MODEL from './flower.gltf'; 
 
 class Ground extends Group {
-    constructor(parent, x, y, z, xSquares, zSquares, xRotation, zRotation) {
+    constructor(parent, x, y, z, xSquares, zSquares, xRotation, zRotation, holeX=null, holeZ=null) {
         // Call parent Group() constructor
         super();
+
+        if(holeX ===null || holeZ ===null){
+            this.hasHole=false;
+        }
+        else{
+            this.hasHole=true;
+        }
 
         // size of square
         let squareSize = 2;
@@ -70,6 +77,10 @@ class Ground extends Group {
 
         
         this.mesh.receiveShadow = true;
+
+        if(this.hasHole){
+            this.hole = new Hole(this,holeX,holeZ,xRotation,zRotation);
+        }
 
         parent.addToCollisionList(this);
     }
