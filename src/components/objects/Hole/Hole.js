@@ -8,20 +8,25 @@ class Hole extends Group {
         // Call parent Group() constructor
         super();
 
-        this.radius = .3;
+        this.radius = .15;
 
         let geometry = new THREE.CircleGeometry( this.radius, 32 );
-        let material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+        let material = new THREE.MeshBasicMaterial( { 
+            color: 0x000000, 
+            transparent: true,
+            opacity: 1
+        } );
         material.polygonOffset = true;
         material.polygonOffsetFactor = -0.1;
         this.circle = new THREE.Mesh( geometry, material );
 
         this.circle.position.x = x;
+        this.circle.position.y = parent.mesh.position.y;
         this.circle.position.z = z;
 
         this.circle.rotation.x = xRotation;
         this.circle.rotation.z = zRotation;
-        
+
     }
 }
 

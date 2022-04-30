@@ -122,12 +122,12 @@ class Ball extends Group {
         // prob set the angle with constant
         if (this.controller["KeyA"].pressed){
             // this.velocity.add(new THREE.Vector3(.5, 0, 0));
-            this.launchDirection.applyAxisAngle(new THREE.Vector3(0, 1, 0), 0.0872665);
+            this.launchDirection.applyAxisAngle(new THREE.Vector3(0, 1, 0), 0.0872665/2);
             // this is extra to make things look nice (makes launch on the plane)
             this.launchDirection.projectOnPlane(this.floorDirection).normalize();
         }
         if (this.controller["KeyD"].pressed){
-            this.launchDirection.applyAxisAngle(new THREE.Vector3(0, 1, 0), -0.0872665);
+            this.launchDirection.applyAxisAngle(new THREE.Vector3(0, 1, 0), -0.0872665/2);
             // this is extra to make things look nice (makes launch on the plane)
             this.launchDirection.projectOnPlane(this.floorDirection).normalize();
         }
@@ -166,7 +166,7 @@ class Ball extends Group {
             }
             // launch ball
             if(!this.controller["Space"].pressed && this.startLaunch !==null){
-                let launchPower = 10*Math.sin((timeStamp-this.startLaunch)/ 300)+0.1;
+                let launchPower = 10*Math.sin(2*Math.PI*(timeStamp-this.startLaunch)/ 5000)+0.1;
                 // let launchPower = 10;
                 this.addVelocity(this.launchDirection.clone().multiplyScalar(launchPower));
 
@@ -195,14 +195,19 @@ class Ball extends Group {
         let d = floor.normal.dot(floor.mesh.position);
         let floorPosition = (d-(this.ball.position.x*floor.normal.x+this.ball.position.z*floor.normal.z))/floor.normal.y;
 
+        // try to make hole test
+        let inHole = false;
         if(floor.hasHole){
-            let ballCoord = this.ball.position.clone().projectOnPlane(new THREE.Vector3(0,1,0));
-            if(ballCoord.distanceTo(floor.hole.circle.position.clone().projectOnPlane(new THREE.Vector3(0,1,0)))<floor.hole.radius+0.01){
-                floorPosition -= this.radius;
-                return;
+            if(this.ball.position.distanceTo(floor.hole.circle.position)<floor.hole.radius+0.01){
+                floorPosition -= .2;
+                inHole = true;
+            }
+            else{
+                inHole = false;
             }
         }
 
+        // let ball fall to infinity
         if(this.ball.position.y<floorPosition-this.radius){
             return;
         }
