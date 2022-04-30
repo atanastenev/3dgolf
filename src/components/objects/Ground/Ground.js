@@ -9,19 +9,11 @@ class Ground extends Group {
         // Call parent Group() constructor
         super();
 
-<<<<<<< HEAD
         // size of square
         let squareSize = 2;
         // checkerboard color
         let materialEven = new THREE.MeshBasicMaterial({color: 0x32a852,});
         let materialOdd = new THREE.MeshBasicMaterial({color: 0x1c802c,});
-=======
-        let segments = 5
-
-        let materialEven = new THREE.MeshBasicMaterial({color: 0x32a852,});
-        let materialOdd = new THREE.MeshBasicMaterial({color: 0x000000,});
-    
->>>>>>> 1275e16feff054fa3b44f764efa99135bc05c715
         let materials = [materialEven,materialOdd];
 
         // ground mesh
@@ -64,12 +56,17 @@ class Ground extends Group {
         zAxis.applyAxisAngle(xAxis,xRotation);
         this.normal.applyAxisAngle(zAxis,zRotation);
 
+        // get the bounding quad
+        let quadBound = [];
         for(let corner of corners){
             corner.applyAxisAngle(xAxis,xRotation);
             corner.applyAxisAngle(zAxis,zRotation);
+            quadBound.push(new THREE.Vector3(corner.x,0,corner.z));
         }
 
-        this.boundary = {minX:Infinity,maxX:-Infinity,minZ:Infinity,maxZ:-Infinity};
+        this.triangleBounds = [];
+        this.triangleBounds.push(new THREE.Triangle(quadBound[0],quadBound[1],quadBound[2]));
+        this.triangleBounds.push(new THREE.Triangle(quadBound[1],quadBound[2],quadBound[3]));
 
         
         this.mesh.receiveShadow = true;

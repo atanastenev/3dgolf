@@ -44,7 +44,7 @@ class Ball extends Group {
         // this.setForce(gravity)
 
         // use for launching
-        this.launchDirection = new THREE.Vector3(1,0,0);
+        this.launchDirection = new THREE.Vector3(0,0,1);
         // implement later
         this.floorDirection = new THREE.Vector3(0,1,0);
         this.startLaunch = null;
@@ -186,6 +186,10 @@ class Ball extends Group {
     handleCollision(floor){
         // old iteration of floor position
         // let floorPosition = floor.mesh.position.y;
+
+        if(!floor.triangleBounds[0].containsPoint(this.ball.position) && !floor.triangleBounds[1].containsPoint(this.ball.position)){
+            return;
+        }
 
         // use equation of a plane
         let d = floor.normal.dot(floor.mesh.position);
