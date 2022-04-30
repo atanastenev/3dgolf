@@ -12,10 +12,19 @@ import { CourseScene } from 'scenes';
 import './instructions.css';
 import INSTRUCTION_HTML from './instructions.html';
 
+// variables
+let WIDTH = window.innerWidth;
+let HEIGHT = window.innerHeight;
+
 // Initialize core ThreeJS components
 const scene = new CourseScene();
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
+
+// initialize shots, level, and lives components
+let shots = 0;
+let level = 1;
+let lives = 3;
 
 // Set up camera
 camera.position.set(6, 3, -10);
@@ -37,6 +46,46 @@ controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
+// display number of shots and level
+// adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js
+var shots_text = document.createElement('div');
+shots_text.style.position = 'absolute';
+shots_text.style.width = 100;
+shots_text.style.height = 100;
+shots_text.innerHTML = "Shots: " + shots;
+shots_text.style.top = 0.09 * HEIGHT + 'px';
+shots_text.style.left = 0.05 * WIDTH + 'px';
+shots_text.style.fontFamily = 'Poppins, sans-serif';
+shots_text.style.fontSize = 0.015 * WIDTH + 'px';
+shots_text.style.color = "#000000";
+shots_text.id = "shots_text"
+document.body.appendChild(shots_text);
+
+var level_text = document.createElement('div');
+level_text.style.position = 'absolute';
+level_text.style.width = 80;
+level_text.style.height = 80;
+level_text.innerHTML = "Level: " + level;
+level_text.style.top = 0.12 * HEIGHT + 'px';
+level_text.style.left = 0.05 * WIDTH + 'px';
+level_text.style.fontFamily = 'Poppins, sans-serif';
+level_text.style.fontSize = 0.015 * WIDTH + 'px';
+level_text.style.color = "#000000";
+level_text.id = "level_text"
+document.body.appendChild(level_text);
+
+var live_text = document.createElement('div');
+live_text.style.position = 'absolute';
+live_text.style.width = 100;
+live_text.style.height = 100;
+live_text.innerHTML = "Lives: " + lives;
+live_text.style.top = 0.15 * HEIGHT + 'px';
+live_text.style.left = 0.05 * WIDTH + 'px';
+live_text.style.fontFamily = 'Poppins, sans-serif';
+live_text.style.fontSize = 0.015 * WIDTH + 'px';
+live_text.style.color = "#000000";
+live_text.id = "live_text"
+document.body.appendChild(live_text);
 
 // ideas from https://github.com/mrdoob/three.js/blob/master/examples/misc_controls_pointerlock.html
 // https://github.com/karenying/drivers-ed/blob/master/src/app.js
