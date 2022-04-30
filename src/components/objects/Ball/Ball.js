@@ -52,7 +52,7 @@ class Ball extends Group {
 
         let points = [];
         points.push(this.ball.position);
-        points.push( new THREE.Vector3( 1, 0.1, 0 ) );
+        points.push(this.ball.position.clone().add(new THREE.Vector3( 1, 0.1, 0 )));
         // let lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
         let tubeGeometry = new THREE.TubeGeometry(
             new THREE.CatmullRomCurve3(points),

@@ -40,7 +40,7 @@ class CourseScene extends Scene {
         // actually add to the scene
         this.add(lights, ball.ball, ball.line, ground.mesh);
         if(ground.hasHole){
-            this.add(ground.hole.circle);
+            this.add(ground.hole.circle, ground.hole.flagStick);
         }
 
         // Populate GUI

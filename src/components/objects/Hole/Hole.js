@@ -8,6 +8,7 @@ class Hole extends Group {
         // Call parent Group() constructor
         super();
 
+        // actual hole
         this.radius = .15;
 
         let geometry = new THREE.CircleGeometry( this.radius, 32 );
@@ -26,6 +27,26 @@ class Hole extends Group {
 
         this.circle.rotation.x = xRotation;
         this.circle.rotation.z = zRotation;
+
+        // flag for decoration
+        let points = [];
+        points.push(this.circle.position);
+        points.push(this.circle.position.clone().add(new THREE.Vector3(0,2,0)));
+        // let lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
+        let tubeGeometry = new THREE.TubeGeometry(
+            new THREE.CatmullRomCurve3(points),
+            500,// path segments
+            0.03,// THICKNESS
+            10, //Roundness of Tube
+            false //closed
+          );
+        let stickMaterial = new THREE.LineBasicMaterial( {color: 0xffffff,} );
+
+        // flag stick
+        this.flagStick = new THREE.Line(tubeGeometry, stickMaterial);
+
+        // flag flag
+        
 
     }
 }
