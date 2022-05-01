@@ -5,7 +5,7 @@ import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 
 
 class Ball extends Group {
-    constructor(parent) {
+    constructor(parent, x, y, z) {
         // Call parent Group() constructor
         super();
 
@@ -28,7 +28,7 @@ class Ball extends Group {
         this.ball.receiveShadow = true;
 
         // position, velocity, force
-        let pos = new THREE.Vector3(0, 2, 0);
+        let pos = new THREE.Vector3(x, y, z);
         this.saveSpot = new THREE.Vector3(0,2,0);
         this.ball.position.copy(pos);
 

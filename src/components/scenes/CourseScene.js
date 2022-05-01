@@ -25,7 +25,7 @@ class CourseScene extends Scene {
         this.background = new Color(0x7ec0ee);
 
         // golf ball
-        const ball = new Ball(this);
+        const ball = new Ball(this, 0,2,0);
         // current floor with ugly texture lol
         // (x,y,z, xSquares,zSquares, xRotate, zRotate)
         const ground = new Ground(this, 0,0,0,     3,5,      -Math.PI*90/180,0,      1,1);
@@ -41,11 +41,12 @@ class CourseScene extends Scene {
         this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
 
         // stuff for stroke count and level
+        // adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js
         let WIDTH = window.innerWidth;
         let HEIGHT = window.innerHeight;
 
         this.strokeCount = ball.strokeCount;
-        let level = 1;
+        this.level = 1;
         let lives = 3;
         
         this.stats_text = document.createElement('div');
@@ -91,7 +92,7 @@ class CourseScene extends Scene {
             }
         }
 
-        this.stats_text.innerHTML = "Shots: " + this.strokeCount + "<br>" + "Level: " + "1" +  "<br>" + "Lives: " + "3";
+        this.stats_text.innerHTML = "Shots: " + this.strokeCount + "<br>" + "Level: " + this.level +  "<br>" + "Lives: " + "3";
 
         document.body.appendChild(this.stats_text);
 

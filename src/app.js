@@ -12,15 +12,17 @@ import { CourseScene } from 'scenes';
 import './instructions.css';
 import INSTRUCTION_HTML from './instructions.html';
 
-// variables
-let WIDTH = window.innerWidth;
-let HEIGHT = window.innerHeight;
+
 
 // Initialize core ThreeJS components
 const scene = new CourseScene();
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
+/************* NOT USED? ******************/ 
+// variables
+// let WIDTH = window.innerWidth;
+// let HEIGHT = window.innerHeight;
 // initialize shots, level, and lives components
 // let shots = scene.strokeCount;
 // let level = 1;
@@ -46,6 +48,7 @@ controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
+/************* NOT USED? ******************/ 
 // display number of shots and level
 // adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js
 // var stats_text = document.createElement('div');
@@ -95,8 +98,8 @@ const windowResizeHandler = () => {
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
 
-// handler for changing the game stats
-window.addEventListener('keydown', function (event) {
+// handler for changing the game stats ()
+// window.addEventListener('keydown', function (event) {
     // if (event.key == ' '){
     //     shots++;
     // }
@@ -104,7 +107,7 @@ window.addEventListener('keydown', function (event) {
     //     lives--;
     // }
     // document.getElementById('stats_text').innerHTML = "Shots: " + shots + "<br>" + "Level: " + level +  "<br>" + "Lives: " + lives;
-});
+// });
 
 // adapted from: https://github.com/efyang/portal-0.5/blob/main/src/instructions.html
 function hideInstructions() {
