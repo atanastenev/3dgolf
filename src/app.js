@@ -47,7 +47,7 @@ controls.enableDamping = true;
 controls.enablePan = false;
 controls.minDistance = 10;
 controls.maxDistance = 13;
-controls.maxPolarAngle = Math.PI/3;
+controls.maxPolarAngle = Math.PI/2.5;
 controls.update();
 
 /************* NOT USED? ******************/ 
