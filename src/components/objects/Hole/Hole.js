@@ -35,10 +35,10 @@ class Hole extends Group {
         // let lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
         let tubeGeometry = new THREE.TubeGeometry(
             new THREE.CatmullRomCurve3(points),
-            500,// path segments
-            0.03,// THICKNESS
-            10, //Roundness of Tube
-            false //closed
+            500,    // segments
+            0.03,   // radius
+            10,     // radial segments
+            true    // closed
           );
         let stickMaterial = new THREE.LineBasicMaterial( {color: 0xffffff,} );
 

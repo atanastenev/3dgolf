@@ -41,10 +41,6 @@ class Ball extends Group {
         this.mass = 10;
         this.netForce = new THREE.Vector3(0,-9.8*this.mass,0);
 
-        // dk if this is necessary
-        // let gravity = new THREE.Vector3(0,-9.8*this.mass,0);
-        // this.setForce(gravity)
-
         // use for launching
         this.launchDirection = new THREE.Vector3(1,0,0);
         // implement later
@@ -54,13 +50,12 @@ class Ball extends Group {
         let points = [];
         points.push(this.ball.position);
         points.push(this.ball.position.clone().add(new THREE.Vector3( 1, 0.1, 0 )));
-        // let lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
         let tubeGeometry = new THREE.TubeGeometry(
             new THREE.CatmullRomCurve3(points),
-            500,// path segments
-            0.01,// THICKNESS
-            10, //Roundness of Tube
-            false //closed
+            500,    // segments
+            0.01,   // radius
+            10,     // radial segments
+            true    // closed
           );
         let lineMaterial = new THREE.LineBasicMaterial( {
              color: 0xff00ff,
