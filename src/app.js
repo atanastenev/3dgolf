@@ -48,44 +48,18 @@ controls.update();
 
 // display number of shots and level
 // adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js
-var shots_text = document.createElement('div');
-shots_text.style.position = 'absolute';
-shots_text.style.width = 100;
-shots_text.style.height = 100;
-shots_text.innerHTML = "Shots: " + shots;
-shots_text.style.top = 0.09 * HEIGHT + 'px';
-shots_text.style.left = 0.05 * WIDTH + 'px';
-shots_text.style.fontFamily = 'Poppins, sans-serif';
-shots_text.style.fontSize = 0.015 * WIDTH + 'px';
-shots_text.style.color = "#000000";
-shots_text.id = "shots_text"
-document.body.appendChild(shots_text);
-
-var level_text = document.createElement('div');
-level_text.style.position = 'absolute';
-level_text.style.width = 80;
-level_text.style.height = 80;
-level_text.innerHTML = "Level: " + level;
-level_text.style.top = 0.12 * HEIGHT + 'px';
-level_text.style.left = 0.05 * WIDTH + 'px';
-level_text.style.fontFamily = 'Poppins, sans-serif';
-level_text.style.fontSize = 0.015 * WIDTH + 'px';
-level_text.style.color = "#000000";
-level_text.id = "level_text"
-document.body.appendChild(level_text);
-
-var live_text = document.createElement('div');
-live_text.style.position = 'absolute';
-live_text.style.width = 100;
-live_text.style.height = 100;
-live_text.innerHTML = "Lives: " + lives;
-live_text.style.top = 0.15 * HEIGHT + 'px';
-live_text.style.left = 0.05 * WIDTH + 'px';
-live_text.style.fontFamily = 'Poppins, sans-serif';
-live_text.style.fontSize = 0.015 * WIDTH + 'px';
-live_text.style.color = "#000000";
-live_text.id = "live_text"
-document.body.appendChild(live_text);
+var stats_text = document.createElement('div');
+stats_text.style.position = 'absolute';
+stats_text.style.width = 100;
+stats_text.style.height = 100;
+stats_text.innerHTML = "Shots: " + shots + "<br>" + "Level: " + level +  "<br>" + "Lives: " + lives;
+stats_text.style.top = 0.05 * HEIGHT + 'px';
+stats_text.style.left = 0.05 * WIDTH + 'px';
+stats_text.style.fontFamily = 'Poppins, sans-serif';
+stats_text.style.fontSize = 0.015 * WIDTH + 'px';
+stats_text.style.color = "#000000";
+stats_text.id = "stats_text"
+document.body.appendChild(stats_text);
 
 // ideas from https://github.com/mrdoob/three.js/blob/master/examples/misc_controls_pointerlock.html
 // https://github.com/karenying/drivers-ed/blob/master/src/app.js
@@ -95,7 +69,7 @@ instructionsContainer.innerHTML = INSTRUCTION_HTML
 document.body.appendChild(instructionsContainer)
 
 // hide instruction on mouseclick
-window.addEventListener( 'click', function () {
+window.addEventListener('click', function () {
     hideInstructions()
 } );
 
@@ -114,9 +88,23 @@ const windowResizeHandler = () => {
     renderer.setSize(innerWidth, innerHeight);
     camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
+    // move the game stats as the window moves ... sometimes off with the height
+    document.getElementById('stats_text').style.top = 0.05 * innerHeight + 'px';
+    document.getElementById('stats_text').style.left = 0.05 * innerWidth + 'px';
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
+
+// handler for changing the game stats
+window.addEventListener('keydown', function (event) {
+    if (event.key == ' '){
+        shots++;
+    }
+    // if (scene.ball.isFalling == true){
+    //     lives--;
+    // }
+    document.getElementById('stats_text').innerHTML = "Shots: " + shots + "<br>" + "Level: " + level +  "<br>" + "Lives: " + lives;
+});
 
 // adapted from: https://github.com/efyang/portal-0.5/blob/main/src/instructions.html
 function hideInstructions() {
