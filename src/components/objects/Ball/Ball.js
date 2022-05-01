@@ -287,6 +287,9 @@ class Ball extends Group {
     addVelocity(velocity){
         this.velocity.add(velocity);
     }
+    getSuccess (){
+        return this.success;
+    }
 
 }
 

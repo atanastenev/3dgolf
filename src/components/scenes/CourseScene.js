@@ -6,7 +6,7 @@ import { Ball, Ground } from 'objects';
 import { BasicLights } from 'lights';
 
 class CourseScene extends Scene {
-    constructor() {
+    constructor(level) {
         // Call parent Scene() constructor
         super();
 
@@ -25,14 +25,14 @@ class CourseScene extends Scene {
         this.background = new Color(0x7ec0ee);
 
         // golf ball
-        const ball = new Ball(this, 0,2,0);
+        this.ball = new Ball(this, 0,2,0);
         // current floor with ugly texture lol
         // (x,y,z, xSquares,zSquares, xRotate, zRotate)
         const ground = new Ground(this, 0,0,0,     3,5,      -Math.PI*90/180,0,      1,1);
         // idk why the shadows aren't working
         const lights = new BasicLights();
         // actually add to the scene
-        this.add(lights, ball.ball, ball.line, ground.mesh);
+        this.add(lights, this.ball.ball, this.ball.line, ground.mesh);
         if(ground.hasHole){
             this.add(ground.hole.circle, ground.hole.flagStick);
         }
@@ -45,8 +45,8 @@ class CourseScene extends Scene {
         let WIDTH = window.innerWidth;
         let HEIGHT = window.innerHeight;
 
-        this.strokeCount = ball.strokeCount;
-        this.level = 1;
+        this.strokeCount = this.ball.strokeCount;
+        this.level = level;
         let lives = 3;
         
         this.stats_text = document.createElement('div');
@@ -74,6 +74,10 @@ class CourseScene extends Scene {
         this.state.collisionList.push(object);
     }
 
+    getBallSuccess(){
+        return this.ball.getSuccess();
+    }
+
     update(timeStamp) {
         const { rotationSpeed, updateList, mainList, collisionList } = this.state;
         // rotates camera prob remove
@@ -98,7 +102,7 @@ class CourseScene extends Scene {
             }
         }
 
-        this.stats_text.innerHTML = "Shots: " + this.strokeCount + "<br>" + "Level: " + this.level +  "<br>" + "Lives: " + "3";
+        this.stats_text.innerHTML = "Shots: " + this.strokeCount + "<br>" + "Level: " + this.level;
 
         document.body.appendChild(this.stats_text);
 

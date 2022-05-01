@@ -8,14 +8,13 @@
  */
 import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { CourseScene } from 'scenes';
+import { CourseScene, SeedScene } from 'scenes';
 import './instructions.css';
 import INSTRUCTION_HTML from './instructions.html';
-
-
+import CHANGELEVEL_HTML from './levelChange.html';
 
 // Initialize core ThreeJS components
-const scene = new CourseScene();
+var scene = [new CourseScene(1), new CourseScene(2)];
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
@@ -25,7 +24,7 @@ const renderer = new WebGLRenderer({ antialias: true });
 // let HEIGHT = window.innerHeight;
 // initialize shots, level, and lives components
 // let shots = scene.strokeCount;
-// let level = 1;
+let currlevel = 0;
 // let lives = 3;
 
 // Set up camera
@@ -53,44 +52,54 @@ controls.update();
 /************* NOT USED? ******************/ 
 // display number of shots and level
 // adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js
-// var stats_text = document.createElement('div');
-// stats_text.style.position = 'absolute';
-// stats_text.style.width = 100;
-// stats_text.style.height = 100;
-// stats_text.innerHTML = "Shots: " + shots + "<br>" + "Level: " + level +  "<br>" + "Lives: " + lives;
-// stats_text.style.top = 0.05 * HEIGHT + 'px';
-// stats_text.style.left = 0.05 * WIDTH + 'px';
-// stats_text.style.fontFamily = 'Poppins, sans-serif';
-// stats_text.style.fontSize = 0.015 * WIDTH + 'px';
-// stats_text.style.color = "#000000";
-// stats_text.id = "stats_text"
-// document.body.appendChild(stats_text);
 
 // ideas from https://github.com/mrdoob/three.js/blob/master/examples/misc_controls_pointerlock.html
 // https://github.com/karenying/drivers-ed/blob/master/src/app.js
 let instructionsContainer = document.createElement('div');
 instructionsContainer.id = 'instructions-container';
-instructionsContainer.innerHTML = INSTRUCTION_HTML
-document.body.appendChild(instructionsContainer)
+instructionsContainer.innerHTML = INSTRUCTION_HTML;
+document.body.appendChild(instructionsContainer);
 
 // hide instruction on mouseclick
 window.addEventListener('click', function () {
     hideInstructions()
 } );
 
+// // make the level chanage screen - don't append it yet to window
+// let levelChangeContainer = document.createElement('div');
+// levelChangeContainer.id = "levelChange-container";
+// instructionsContainer.innerHTML = CHANGELEVEL_HTML;
+
+console.log(scene[currlevel].getBallSuccess());
+// if (scene[currlevel].getBallSuccess){
+    // document.body.appendChild(levelChangeContainer);
+    // document.getElementById('currlevel').innerHTML = currlevel+1;
+    // currlevel++;
+// }
+
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
 
+    if (scene[currlevel].getBallSuccess()){
+        console.log(scene[currlevel].getBallSuccess());
+        // make the level chanage screen - don't append it yet to window
+        let levelChangeContainer = document.createElement('div');
+        levelChangeContainer.id = "levelChange-container";
+        instructionsContainer.innerHTML = CHANGELEVEL_HTML;
+        document.body.appendChild(levelChangeContainer);
+        document.getElementById('currlevel').innerHTML = currlevel+2;
+        currlevel++;
+    }
 
-    var ballPos = scene.update && scene.update(timeStamp);
+    var ballPos = scene[currlevel].update && scene[currlevel].update(timeStamp);
     // var newCamera = ballPos.pos.clone().sub(ballPos.lastPos).add(lastCamera);
 
     // camera.position.set(newCamera.x, newCamera.y, newCamera.z);
     controls.target = ballPos.pos;
     // lastCamera = newCamera;
 
-    renderer.render(scene, camera);
+    renderer.render(scene[currlevel], camera);
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
@@ -107,17 +116,6 @@ const windowResizeHandler = () => {
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
-
-// handler for changing the game stats ()
-// window.addEventListener('keydown', function (event) {
-    // if (event.key == ' '){
-    //     shots++;
-    // }
-    // if (scene.ball.isFalling == true){
-    //     lives--;
-    // }
-    // document.getElementById('stats_text').innerHTML = "Shots: " + shots + "<br>" + "Level: " + level +  "<br>" + "Lives: " + lives;
-// });
 
 // adapted from: https://github.com/efyang/portal-0.5/blob/main/src/instructions.html
 function hideInstructions() {
