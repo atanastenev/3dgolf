@@ -29,6 +29,7 @@ class Ball extends Group {
 
         // position, velocity, force
         let pos = new THREE.Vector3(0, 2, 0);
+        this.saveSpot = new THREE.Vector3(0,2,0);
         this.ball.position.copy(pos);
 
         this.velocity = new THREE.Vector3();
@@ -103,6 +104,11 @@ class Ball extends Group {
     update(timeStamp) {
         if(this.success) return;
 
+        if(this.ball.position.y < -10){
+            this.ball.position.copy(this.saveSpot);
+            this.velocity = new THREE.Vector3();
+        }
+
         // value from assignment 5
         let dt = 18 / 1000;
         let newPosition = this.ball.position.clone();
@@ -156,6 +162,8 @@ class Ball extends Group {
         }
         // both not moving and not falling for longer than 200ms
         if(!this.isFalling && !this.isMoving && timeStamp-this.startTime > 150){
+            // save location
+            this.saveSpot.copy(this.ball.position).add(new THREE.Vector3(0,0.05,0));
             // check if in hole!
             if(this.inHole){
                 this.success = true;

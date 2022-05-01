@@ -46,7 +46,7 @@ class Hole extends Group {
         this.flagStick = new THREE.Line(tubeGeometry, stickMaterial);
 
         // flag flag
-        
+
 
     }
 }
