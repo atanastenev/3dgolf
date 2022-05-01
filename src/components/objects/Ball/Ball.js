@@ -186,8 +186,8 @@ class Ball extends Group {
             }
             // launch ball
             if(!this.controller["Space"].pressed && this.startLaunch !==null){
-                // let launchPower = -5*Math.cos(2*Math.PI*(timeStamp-this.startLaunch)/ 5000)+5.1;
-                let launchPower = 2;
+                let launchPower = -5*Math.cos(2*Math.PI*(timeStamp-this.startLaunch)/ 5000)+5.1;
+                // let launchPower = 2;
                 this.addVelocity(this.launchDirection.clone().multiplyScalar(launchPower));
 
                 this.startLaunch = null;

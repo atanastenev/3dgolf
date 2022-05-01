@@ -22,9 +22,9 @@ const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
 // initialize shots, level, and lives components
-let shots = 0;
-let level = 1;
-let lives = 3;
+// let shots = scene.strokeCount;
+// let level = 1;
+// let lives = 3;
 
 // Set up camera
 camera.position.set(6, 3, -10);
@@ -48,18 +48,18 @@ controls.update();
 
 // display number of shots and level
 // adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js
-var stats_text = document.createElement('div');
-stats_text.style.position = 'absolute';
-stats_text.style.width = 100;
-stats_text.style.height = 100;
-stats_text.innerHTML = "Shots: " + shots + "<br>" + "Level: " + level +  "<br>" + "Lives: " + lives;
-stats_text.style.top = 0.05 * HEIGHT + 'px';
-stats_text.style.left = 0.05 * WIDTH + 'px';
-stats_text.style.fontFamily = 'Poppins, sans-serif';
-stats_text.style.fontSize = 0.015 * WIDTH + 'px';
-stats_text.style.color = "#000000";
-stats_text.id = "stats_text"
-document.body.appendChild(stats_text);
+// var stats_text = document.createElement('div');
+// stats_text.style.position = 'absolute';
+// stats_text.style.width = 100;
+// stats_text.style.height = 100;
+// stats_text.innerHTML = "Shots: " + shots + "<br>" + "Level: " + level +  "<br>" + "Lives: " + lives;
+// stats_text.style.top = 0.05 * HEIGHT + 'px';
+// stats_text.style.left = 0.05 * WIDTH + 'px';
+// stats_text.style.fontFamily = 'Poppins, sans-serif';
+// stats_text.style.fontSize = 0.015 * WIDTH + 'px';
+// stats_text.style.color = "#000000";
+// stats_text.id = "stats_text"
+// document.body.appendChild(stats_text);
 
 // ideas from https://github.com/mrdoob/three.js/blob/master/examples/misc_controls_pointerlock.html
 // https://github.com/karenying/drivers-ed/blob/master/src/app.js
@@ -97,13 +97,13 @@ window.addEventListener('resize', windowResizeHandler, false);
 
 // handler for changing the game stats
 window.addEventListener('keydown', function (event) {
-    if (event.key == ' '){
-        shots++;
-    }
+    // if (event.key == ' '){
+    //     shots++;
+    // }
     // if (scene.ball.isFalling == true){
     //     lives--;
     // }
-    document.getElementById('stats_text').innerHTML = "Shots: " + shots + "<br>" + "Level: " + level +  "<br>" + "Lives: " + lives;
+    // document.getElementById('stats_text').innerHTML = "Shots: " + shots + "<br>" + "Level: " + level +  "<br>" + "Lives: " + lives;
 });
 
 // adapted from: https://github.com/efyang/portal-0.5/blob/main/src/instructions.html

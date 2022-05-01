@@ -24,12 +24,6 @@ class CourseScene extends Scene {
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
 
-
-        // Add meshes to scene
-        // remove flower and land
-        // const land = new Land();
-        // const flower = new Flower(this);
-
         // golf ball
         const ball = new Ball(this);
         // current floor with ugly texture lol
@@ -45,6 +39,26 @@ class CourseScene extends Scene {
 
         // Populate GUI
         this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
+
+        // stuff for stroke count and level
+        let WIDTH = window.innerWidth;
+        let HEIGHT = window.innerHeight;
+
+        this.strokeCount = ball.strokeCount;
+        let level = 1;
+        let lives = 3;
+        
+        this.stats_text = document.createElement('div');
+        this.stats_text.style.position = 'absolute';
+        this.stats_text.style.width = 100;
+        this.stats_text.style.height = 100;
+        this.stats_text.style.top = 0.05 * HEIGHT + 'px';
+        this.stats_text.style.left = 0.05 * WIDTH + 'px';
+        this.stats_text.style.fontFamily = 'Poppins, sans-serif';
+        this.stats_text.style.fontSize = 0.015 * WIDTH + 'px';
+        this.stats_text.style.color = "#000000";
+        this.stats_text.id = "stats_text"
+        document.body.appendChild(this.stats_text);
     }
 
     addToUpdateList(object) {
@@ -71,10 +85,15 @@ class CourseScene extends Scene {
 
         // for each ball, handle collisions
         for (const main of mainList) {
+            this.strokeCount = main.strokeCount;
             for (const col of collisionList) {
                 main.handleCollision(col);
             }
         }
+
+        this.stats_text.innerHTML = "Shots: " + this.strokeCount + "<br>" + "Level: " + "1" +  "<br>" + "Lives: " + "3";
+
+        document.body.appendChild(this.stats_text);
 
     }
 }
