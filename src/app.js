@@ -29,7 +29,8 @@ const renderer = new WebGLRenderer({ antialias: true });
 // let lives = 3;
 
 // Set up camera
-camera.position.set(6, 3, -10);
+var lastCamera = new Vector3(6, 3, -10);
+camera.position.set(lastCamera.x,lastCamera.y,lastCamera.z);
 camera.lookAt(new Vector3(0, 0, 0));
 
 // Set up renderer, canvas, and minor CSS adjustments
@@ -44,8 +45,9 @@ document.body.appendChild(canvas);
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.enablePan = false;
-controls.minDistance = 4;
-controls.maxDistance = 16;
+controls.minDistance = 10;
+controls.maxDistance = 13;
+controls.maxPolarAngle = Math.PI/3;
 controls.update();
 
 /************* NOT USED? ******************/ 
@@ -79,8 +81,16 @@ window.addEventListener('click', function () {
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
+
+
+    var ballPos = scene.update && scene.update(timeStamp);
+    // var newCamera = ballPos.pos.clone().sub(ballPos.lastPos).add(lastCamera);
+
+    // camera.position.set(newCamera.x, newCamera.y, newCamera.z);
+    controls.target = ballPos.pos;
+    // lastCamera = newCamera;
+
     renderer.render(scene, camera);
-    scene.update && scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);

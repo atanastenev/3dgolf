@@ -79,8 +79,14 @@ class CourseScene extends Scene {
         // rotates camera prob remove
         // this.rotation.y = (rotationSpeed * timeStamp) / 10000;
 
+        var pos = null;
+        var lastPos = null
+
         // Call update for each object in the updateList
         for (const obj of updateList) {
+            pos = obj.ball.position;
+            lastPos = obj.lastPosition;
+
             obj.update(timeStamp);
         }
 
@@ -96,6 +102,7 @@ class CourseScene extends Scene {
 
         document.body.appendChild(this.stats_text);
 
+        return {pos:pos, lastPos:lastPos};
     }
 }
 

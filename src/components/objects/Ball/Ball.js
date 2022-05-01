@@ -29,8 +29,11 @@ class Ball extends Group {
 
         // position, velocity, force
         let pos = new THREE.Vector3(x, y, z);
-        this.saveSpot = new THREE.Vector3(0,2,0);
+        this.saveSpot = new THREE.Vector3(x,y,z);
+
+        // every time ball position updates, last position gets updated
         this.ball.position.copy(pos);
+        this.lastPosition = new THREE.Vector3(x,y,z);
 
         this.velocity = new THREE.Vector3();
 
@@ -73,7 +76,8 @@ class Ball extends Group {
         parent.addToUpdateList(this);
         parent.addToMainList(this);
 
-        // courtesy of the portal code
+        // courtesy of the portal code 
+        // adapted from: https://github.com/efyang/portal-0.5/blob/main/src/components/objects/Player/Player.js
         this.controller = {
             "KeyW": {pressed: false},
             "KeyS": {pressed: false},
@@ -100,6 +104,7 @@ class Ball extends Group {
         if(this.success) return;
 
         if(this.ball.position.y < -10){
+            this.lastPosition.copy(this.ball.position);
             this.ball.position.copy(this.saveSpot);
             this.velocity = new THREE.Vector3();
         }
@@ -123,6 +128,7 @@ class Ball extends Group {
         // n-body integration method
         newPosition.addScaledVector(this.velocity,dt);
         this.velocity.addScaledVector(this.netForce,dt/this.mass);
+        this.lastPosition.copy(this.ball.position);
         this.ball.position.copy(newPosition);
 
 
@@ -173,7 +179,7 @@ class Ball extends Group {
                 500,// path segments
                 0.01,// THICKNESS
                 10, //Roundness of Tube
-                false //closed
+                true //closed
             );
             // start launch power for 
             if(this.controller["Space"].pressed && this.startLaunch ===null){
@@ -245,6 +251,7 @@ class Ball extends Group {
             // maybe add later
             this.floorDirection = floor.normal;
             let newPosition = new THREE.Vector3(this.ball.position.x,floorPosition+this.radius+EPS,this.ball.position.z)
+            // this.lastPosition.copy(this.ball.position);
             this.ball.position.copy(newPosition);
 
             // stops the infinite bouncing
