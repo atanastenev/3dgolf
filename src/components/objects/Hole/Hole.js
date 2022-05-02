@@ -46,6 +46,21 @@ class Hole extends Group {
         this.flagStick = new THREE.Line(tubeGeometry, stickMaterial);
 
         // flag flag
+        let points2 = [];
+        for(let i = 1; i<9; i++){
+            points2.push(this.circle.position.clone().add(new THREE.Vector3(0.06*i,1.575+0.025*i,0)));
+            points2.push(this.circle.position.clone().add(new THREE.Vector3(0.06*i,2.025-0.025*i,0)));
+        }
+        let flagGeometry = new THREE.TubeGeometry(
+            new THREE.CatmullRomCurve3(points2),
+            1000,    // segments
+            0.03,   // radius
+            10,     // radial segments
+            true    // closed
+          );
+        let flagMaterial = new THREE.LineBasicMaterial( {color: 0xff0000,} );
+
+        this.flagFlag = new THREE.Line(flagGeometry, flagMaterial);
 
 
     }
