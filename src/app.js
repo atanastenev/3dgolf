@@ -8,24 +8,18 @@
  */
 import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { CourseScene, SeedScene } from 'scenes';
+import { CourseScene, CourseScene2, SeedScene } from 'scenes';
 import './instructions.css';
 import INSTRUCTION_HTML from './instructions.html';
 import CHANGELEVEL_HTML from './levelChange.html';
 
 // Initialize core ThreeJS components
-var scene = [new CourseScene(1), new CourseScene(2)];
+var scene = [new CourseScene(1), new CourseScene2(2)];
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
-/************* NOT USED? ******************/ 
 // variables
-// let WIDTH = window.innerWidth;
-// let HEIGHT = window.innerHeight;
-// initialize shots, level, and lives components
-// let shots = scene.strokeCount;
 let currlevel = 0;
-// let lives = 3;
 
 // Set up camera
 var lastCamera = new Vector3(6, 3, -10);
@@ -66,28 +60,19 @@ window.addEventListener('click', function () {
 } );
 
 // // make the level chanage screen - don't append it yet to window
-// let levelChangeContainer = document.createElement('div');
-// levelChangeContainer.id = "levelChange-container";
-// instructionsContainer.innerHTML = CHANGELEVEL_HTML;
-
-console.log(scene[currlevel].getBallSuccess());
-// if (scene[currlevel].getBallSuccess){
-    // document.body.appendChild(levelChangeContainer);
-    // document.getElementById('currlevel').innerHTML = currlevel+1;
-    // currlevel++;
-// }
+let levelChangeContainer = document.createElement('div');
+levelChangeContainer.id = "levelChange-container";
+levelChangeContainer.innerHTML = CHANGELEVEL_HTML;
+levelChangeContainer.display = 'none';
+levelChangeContainer.opacity = '0';
+document.body.appendChild(levelChangeContainer);
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
 
     if (scene[currlevel].getBallSuccess()){
-        console.log(scene[currlevel].getBallSuccess());
-        // make the level chanage screen - don't append it yet to window
-        let levelChangeContainer = document.createElement('div');
-        levelChangeContainer.id = "levelChange-container";
-        instructionsContainer.innerHTML = CHANGELEVEL_HTML;
-        document.body.appendChild(levelChangeContainer);
+
         document.getElementById('currlevel').innerHTML = currlevel+2;
         currlevel++;
     }
@@ -127,3 +112,13 @@ function hideInstructions() {
         }, 2000)
     }
 }
+
+// function hideLevelChange() {
+//     let levelChangeContainer = document.getElementById('levelChange-container')
+//     if (instructionsContainer.style.display !== 'none') {
+//         instructionsContainer.style.opacity = '0'
+//         setTimeout(() => {
+//             instructionsContainer.style.display = 'none'
+//         }, 2000)
+//     }
+// }
