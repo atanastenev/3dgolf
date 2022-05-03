@@ -38,7 +38,7 @@ class CourseScene extends Scene {
         }
 
         // Populate GUI
-        this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
+        // this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
 
         // stuff for stroke count and level
         // adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js

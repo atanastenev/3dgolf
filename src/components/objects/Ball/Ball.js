@@ -50,6 +50,7 @@ class Ball extends Group {
         this.floorDirection = new THREE.Vector3(0,1,0);
         this.startLaunch = null;
 
+        // launch line
         let points = [];
         points.push(this.ball.position);
         points.push(this.ball.position.clone().add(new THREE.Vector3( 1, 0.1, 0 )));
@@ -98,12 +99,19 @@ class Ball extends Group {
             }
         })
 
+
+        let WIDTH = window.innerWidth;
+        let HEIGHT = window.innerHeight;
+        // this.powerBar = document.createElement('div');
+
+        // document.body.appendChild(this.powerBar);
+
     }
 
     update(timeStamp) {
         if(this.success) return;
 
-        if(this.ball.position.y < -10){
+        if(this.ball.position.y < -5){
             this.lastPosition.copy(this.ball.position);
             this.ball.position.copy(this.saveSpot);
             this.velocity = new THREE.Vector3();
@@ -158,11 +166,11 @@ class Ball extends Group {
         if(!this.isFalling && !this.isMoving && this.startTime === null){
             this.startTime = timeStamp;
         }
-        else if(this.isFalling || this.isMoving){
+        else if(this.isFalling || this.isMoving || this.ball.position.y < 0){
             this.startTime = null;
         }
         // both not moving and not falling for longer than 200ms
-        if(!this.isFalling && !this.isMoving && timeStamp-this.startTime > 150){
+        if(!this.isFalling && !this.isMoving && timeStamp-this.startTime > 150 && this.startTime != null){
             // save location
             this.saveSpot.copy(this.ball.position).add(new THREE.Vector3(0,0.05,0));
             // check if in hole!
@@ -205,12 +213,15 @@ class Ball extends Group {
 
     // my floor collision from assignment 5 with some extra
     handleCollision(floor){
-        // old iteration of floor position
-        // let floorPosition = floor.mesh.position.y;
 
-        if(!floor.triangleBounds[0].containsPoint(this.ball.position) && !floor.triangleBounds[1].containsPoint(this.ball.position)){
-            return;
+        let outBounds = false;
+        for (const triangle of floor.triangleBounds) {
+            outBounds = (outBounds || triangle.containsPoint(this.ball.position))
         }
+        if(!outBounds) return;
+        // if(!floor.triangleBounds[0].containsPoint(this.ball.position) && !floor.triangleBounds[1].containsPoint(this.ball.position)){
+        //     return;
+        // }
 
         // use equation of a plane
         let d = floor.normal.dot(floor.mesh.position);
@@ -275,6 +286,7 @@ class Ball extends Group {
         const EPS2 = 0.01
         if(this.ball.position.y>floorPosition+this.radius+EPS2){
             this.isFalling = true;
+            // ???? idr what this is for
             this.floorDirection = new THREE.Vector3(0,1,0);
         }
     }
