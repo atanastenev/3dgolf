@@ -118,9 +118,11 @@ class Ball extends Group {
 
         // update the acceleration, velocity, and position
         const DRAG = 8
+        const PROJ = 3
         if(this.velocity.lengthSq()>0){
             let friction = this.velocity.clone().multiplyScalar(-DRAG);
-            this.setForce(gravity.add(friction));
+            let projGrav = gravity.clone().projectOnPlane(this.floorDirection).multiplyScalar(PROJ);
+            this.setForce(gravity.add(projGrav).add(friction));
         }
         else{
             this.setForce(gravity);
@@ -187,14 +189,16 @@ class Ball extends Group {
                 this.startLaunch = timeStamp;
             }
             if(this.controller["Space"].pressed && this.startLaunch !==null){
-                let launchPower = -5*Math.cos(2*Math.PI*(timeStamp-this.startLaunch)/ 5000)+5.1;
-                let fraction = 100-100*launchPower/10.1;
+                let power = 20
+                let launchPower = -power*Math.cos(2*Math.PI*(timeStamp-this.startLaunch)/ 5000)+power+.1;
+                let fraction = 100-100*launchPower/(2*power+.1);
                 
                 document.getElementsByClassName("innerBar")[0].style.width = fraction + "%";
             }
             // launch ball
             if(!this.controller["Space"].pressed && this.startLaunch !==null){
-                let launchPower = -5*Math.cos(2*Math.PI*(timeStamp-this.startLaunch)/ 5000)+5.1;
+                let power = 20
+                let launchPower = -power*Math.cos(2*Math.PI*(timeStamp-this.startLaunch)/ 5000)+power+.1;
                 // let launchPower = 2;
                 this.addVelocity(this.launchDirection.clone().multiplyScalar(launchPower));
 
@@ -250,14 +254,12 @@ class Ball extends Group {
     // my floor collision from assignment 5 with some extra
     handleCollision(floor){
 
+        // check if ball is on floor
         let outBounds = false;
         for (const triangle of floor.triangleBounds) {
             outBounds = (outBounds || triangle.containsPoint(this.ball.position))
         }
         if(!outBounds) return;
-        // if(!floor.triangleBounds[0].containsPoint(this.ball.position) && !floor.triangleBounds[1].containsPoint(this.ball.position)){
-        //     return;
-        // }
 
         // use equation of a plane
         let d = floor.normal.dot(floor.mesh.position);
@@ -323,7 +325,7 @@ class Ball extends Group {
         if(this.ball.position.y>floorPosition+this.radius+EPS2){
             this.isFalling = true;
             // ???? idr what this is for
-            this.floorDirection = new THREE.Vector3(0,1,0);
+            this.floorDirection = floor.normal;
         }
     }
 

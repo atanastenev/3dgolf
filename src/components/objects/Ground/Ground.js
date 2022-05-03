@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 
 class Ground extends Group {
-    constructor(parent, x, y, z, xSquares, zSquares, xRotation, zRotation, holeX=null, holeZ=null) {
+    constructor(parent, x, y, z, xSquares, zSquares, xRotation, zRotation,holeX=null, holeZ=null, flip = false) {
         // Call parent Group() constructor
         super();
 
@@ -21,7 +21,13 @@ class Ground extends Group {
         // checkerboard color
         let materialEven = new THREE.MeshBasicMaterial({color: 0x32a852,});
         let materialOdd = new THREE.MeshBasicMaterial({color: 0x1c802c,});
-        let materials = [materialEven,materialOdd];
+        if(!flip){
+            var materials = [materialEven,materialOdd];
+        }
+        else{
+            var materials = [materialOdd,materialEven];
+        }
+    
 
         // ground mesh
         let geometry = new THREE.PlaneGeometry(xSquares*squareSize,zSquares*squareSize,xSquares,zSquares);

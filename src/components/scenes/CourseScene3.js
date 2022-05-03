@@ -5,7 +5,7 @@ import { Scene, Color } from 'three';
 import { Ball, Ground } from 'objects';
 import { BasicLights } from 'lights';
 
-class CourseScene extends Scene {
+class CourseScene3 extends Scene {
     constructor(level) {
         // Call parent Scene() constructor
         super();
@@ -25,17 +25,27 @@ class CourseScene extends Scene {
         this.background = new Color(0x7ec0ee);
 
         // golf ball
-        this.ball = new Ball(this, 0,2,0);
-        // current floor with ugly texture lol
-        // (x,y,z, xSquares,zSquares, xRotate, zRotate)
-        const ground = new Ground(this, 0,0,0,     3,5,      -Math.PI*90/180,0,      1,1, true);
-        // const ground = new Ground(this, -2,0,2, 3,7, -Math.PI*90/180,0);
+        this.ball = new Ball(this, 9,4, 0);
+        // (x,y,z, xSquares,zSquares, xRotate, yRotate, zRotate, holex, holez, flip)
+        let grounds = []
+        grounds.push(new Ground(this, 0,0,0,     3,3,      -Math.PI*90/180,0,0,      1,1));
+        // use some trig lol
+        grounds.push(new Ground(this, 0,0.868240888335,-7.924,          3,5,    -Math.PI*80/180,-Math.PI*0/180));
+        grounds.push(new Ground(this, 0,1.73648177667,-15.8480775301,   3,3,    -Math.PI*90/180,0,                      null, null, true));
+        grounds.push(new Ground(this, 8,1.73648177667,-15.8480775301,   3,5,    -Math.PI*90/180,-Math.PI*90/180));
+        grounds.push(new Ground(this, 10,2.60472266501,-7.924,          3,5,    -Math.PI*100/180,-Math.PI*0/180,        null, null, true));
+        grounds.push(new Ground(this, 9,3.47296355334,0,          4,3,    -Math.PI*90/180,-Math.PI*0/180,        null, null, true));
+
         // idk why the shadows aren't working
         const lights = new BasicLights();
         // actually add to the scene
-        this.add(lights, this.ball.ball, this.ball.line, ground.mesh);
-        if(ground.hasHole){
-            this.add(ground.hole.circle, ground.hole.flagStick, ground.hole.flagFlag);
+        this.add(lights, this.ball.ball, this.ball.line);
+
+        for(const ground of grounds){
+            this.add(ground.mesh)
+            if(ground.hasHole){
+                this.add(ground.hole.circle, ground.hole.flagStick, ground.hole.flagFlag);
+            }
         }
 
         // Populate GUI
@@ -116,4 +126,4 @@ class CourseScene extends Scene {
     }
 }
 
-export default CourseScene;
+export default CourseScene3;
