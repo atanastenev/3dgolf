@@ -85,7 +85,7 @@ const onAnimationFrameHandler = (timeStamp) => {
             document.getElementById('currlevel').innerHTML = currlevel+2;
             var stat = "stats_text";
             if (currlevel > 0 ){
-                stat += currlevel+2;
+                stat += currlevel+1;
             }
             document.body.removeChild(document.getElementById(stat));
             currlevel++;

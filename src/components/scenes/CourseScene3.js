@@ -69,7 +69,7 @@ class CourseScene3 extends Scene {
         this.stats_text.style.fontFamily = 'Poppins, sans-serif';
         this.stats_text.style.fontSize = 0.015 * WIDTH + 'px';
         this.stats_text.style.color = "#000000";
-        this.stats_text.id = "stats_text"
+        this.stats_text.id = "stats_text3"
         document.body.appendChild(this.stats_text);
     }
 
