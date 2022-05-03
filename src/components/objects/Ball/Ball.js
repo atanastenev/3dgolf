@@ -103,9 +103,8 @@ class Ball extends Group {
 
     update(timeStamp) {
         if(this.success) return;
-
         if(this.ball.position.y < -5){
-            this.lastPosition.copy(this.ball.position);
+            // this.lastPosition.copy(this.ball.position);
             this.ball.position.copy(this.saveSpot);
             this.velocity = new THREE.Vector3();
         }
@@ -205,15 +204,13 @@ class Ball extends Group {
                 this.startLaunch = null;
                 this.strokeCount +=1;
 
-                // document.getElementsByClassName("innerBar")[0].style.width = "100%";
             }
 
         }
         else{
             this.line.material.opacity=0;
         }
-
-
+        // console.log(this.isFalling)
     }
 
     handleBoxCollision(box){
@@ -265,6 +262,10 @@ class Ball extends Group {
         let d = floor.normal.dot(floor.mesh.position);
         let floorPosition = (d-(this.ball.position.x*floor.normal.x+this.ball.position.z*floor.normal.z))/floor.normal.y;
 
+        if(this.ball.position.y>floorPosition+3*this.radius){
+            return;
+        }
+
         // try to make hole test
         const EPShole = 0.001
         if(floor.hasHole){
@@ -294,9 +295,11 @@ class Ball extends Group {
             return;
         }
 
+        
         const EPS = 0.001;
         // in floor
         if(this.ball.position.y<floorPosition+this.radius+EPS){
+
             // maybe add later
             this.floorDirection = floor.normal;
             let newPosition = new THREE.Vector3(this.ball.position.x,floorPosition+this.radius+EPS,this.ball.position.z)
@@ -310,12 +313,13 @@ class Ball extends Group {
                 this.velocity = new THREE.Vector3(this.velocity.x,0,this.velocity.z);
             }
             // factor of 100 should prob depend on the normal of the plane
-            else if (this.isFalling){
+            else{
                 // fix bounce, should bounce in direction of plane
                 this.velocity= new THREE.Vector3(this.velocity.x,this.velocity.y*-.7,this.velocity.z);
             }
 
-            if(this.isMoving){
+            // stop the bouncing on slopes
+            if(this.isMoving && !this.isFalling){
                 this.velocity.projectOnPlane(floor.normal);
             }
 
@@ -324,7 +328,7 @@ class Ball extends Group {
         const EPS2 = 0.01
         if(this.ball.position.y>floorPosition+this.radius+EPS2){
             this.isFalling = true;
-            // ???? idr what this is for
+            // help project the aim line
             this.floorDirection = floor.normal;
         }
     }

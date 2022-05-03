@@ -8,7 +8,7 @@
  */
 import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { CourseScene, CourseScene2, CourseScene3 } from 'scenes';
+import { CourseScene, CourseScene2, CourseScene3, CourseScene4 } from 'scenes';
 import './instructions.css';
 import INSTRUCTION_HTML from './instructions.html';
 import CHANGELEVEL_HTML from './levelChange.html';
@@ -17,12 +17,12 @@ import './powerBar.css';
 import POWERBAR from './powerBar.html';
 
 // Initialize core ThreeJS components
-var scene = [new CourseScene(1), new CourseScene2(2), new CourseScene3(3)];
+var scene = [new CourseScene(1), new CourseScene2(2), new CourseScene3(3), new CourseScene4(4)];
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
 // variables
-let currlevel = 2;
+let currlevel = 0;
 
 // Set up camera
 var lastCamera = new Vector3(6, 3, -10);
