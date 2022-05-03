@@ -22,7 +22,7 @@ const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
 // variables
-let currlevel = 2;
+let currlevel = 0;
 
 // Set up camera
 var lastCamera = new Vector3(6, 3, -10);
