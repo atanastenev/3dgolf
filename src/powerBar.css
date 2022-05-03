@@ -1,0 +1,21 @@
+* {box-sizing: border-box}
+
+.outerBar {
+    font-family: Montserrat, sans-serif; 
+    font-style: italic;
+    transform: rotate(90deg);
+    position: absolute;
+    width: 20%;
+    top: 75%;
+    right: -5%;
+    background-color: #ddd;
+    text-align: center;
+    background: linear-gradient(to right, red , yellow);
+}
+
+.innerBar {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #ddd;
+}

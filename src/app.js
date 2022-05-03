@@ -12,6 +12,8 @@ import { CourseScene, CourseScene2, SeedScene } from 'scenes';
 import './instructions.css';
 import INSTRUCTION_HTML from './instructions.html';
 import CHANGELEVEL_HTML from './levelChange.html';
+import './powerBar.css';
+import POWERBAR from './powerBar.html';
 
 // Initialize core ThreeJS components
 var scene = [new CourseScene(1), new CourseScene2(2)];
@@ -47,12 +49,21 @@ controls.update();
 // display number of shots and level
 // adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js
 
+let powerBar = document.createElement('div');
+powerBar.className = 'outerBar';
+powerBar.innerHTML = "POWER BAR"
+powerBar.innerHTML = POWERBAR;
+document.body.appendChild(powerBar);
+
+
 // ideas from https://github.com/mrdoob/three.js/blob/master/examples/misc_controls_pointerlock.html
 // https://github.com/karenying/drivers-ed/blob/master/src/app.js
 let instructionsContainer = document.createElement('div');
 instructionsContainer.id = 'instructions-container';
 instructionsContainer.innerHTML = INSTRUCTION_HTML;
 document.body.appendChild(instructionsContainer);
+
+
 
 // hide instruction on mouseclick
 window.addEventListener('click', function () {

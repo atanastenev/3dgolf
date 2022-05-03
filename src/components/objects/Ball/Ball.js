@@ -1,6 +1,5 @@
 import { Group } from 'three';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 
 
@@ -100,12 +99,6 @@ class Ball extends Group {
         })
 
 
-        let WIDTH = window.innerWidth;
-        let HEIGHT = window.innerHeight;
-        // this.powerBar = document.createElement('div');
-
-        // document.body.appendChild(this.powerBar);
-
     }
 
     update(timeStamp) {
@@ -193,6 +186,12 @@ class Ball extends Group {
             if(this.controller["Space"].pressed && this.startLaunch ===null){
                 this.startLaunch = timeStamp;
             }
+            if(this.controller["Space"].pressed && this.startLaunch !==null){
+                let launchPower = -5*Math.cos(2*Math.PI*(timeStamp-this.startLaunch)/ 5000)+5.1;
+                let fraction = 100-100*launchPower/10.1;
+                
+                document.getElementsByClassName("innerBar")[0].style.width = fraction + "%";
+            }
             // launch ball
             if(!this.controller["Space"].pressed && this.startLaunch !==null){
                 let launchPower = -5*Math.cos(2*Math.PI*(timeStamp-this.startLaunch)/ 5000)+5.1;
@@ -201,6 +200,8 @@ class Ball extends Group {
 
                 this.startLaunch = null;
                 this.strokeCount +=1;
+
+                // document.getElementsByClassName("innerBar")[0].style.width = "100%";
             }
 
         }
