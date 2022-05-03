@@ -70,20 +70,15 @@ window.addEventListener('click', function () {
     hideInstructions()
 } );
 
-// // make the level chanage screen - don't append it yet to window
-let levelChangeContainer = document.createElement('div');
-levelChangeContainer.id = "levelChange-container";
-levelChangeContainer.innerHTML = CHANGELEVEL_HTML;
-levelChangeContainer.display = 'none';
-levelChangeContainer.opacity = '0';
-document.body.appendChild(levelChangeContainer);
-
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
-
+    console.log(scene[currlevel].getBallSuccess());
     if (scene[currlevel].getBallSuccess()){
-
+        let levelChangeContainer1 = document.getElementById('instructions-container');
+        levelChangeContainer1.innerHTML = CHANGELEVEL_HTML;
+        levelChangeContainer1.style.display = 'block';
+        levelChangeContainer1.style.opacity = '1';
         document.getElementById('currlevel').innerHTML = currlevel+2;
         currlevel++;
     }
