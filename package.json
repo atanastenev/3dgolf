@@ -1,6 +1,6 @@
 {
   "name": "3dgolf",
-  "repository": "3dgolf",
+  "repository": "github.com/atanastenev/3dgolf",
   "version": "1.0.0",
   "title": "3D Mini Golf",
   "description": "Turn-based 3D multiplayer minigolf.",
