@@ -46,10 +46,15 @@ class Ground extends Group {
 
         // get the corners of plane used to bound
         let corners = []
-        corners.push(new THREE.Vector3(x-xSquares*squareSize/2,y-zSquares*squareSize/2,0))
-        corners.push(new THREE.Vector3(x-xSquares*squareSize/2,y+zSquares*squareSize/2,0))
-        corners.push(new THREE.Vector3(x+xSquares*squareSize/2,y-zSquares*squareSize/2,0))
-        corners.push(new THREE.Vector3(x+xSquares*squareSize/2,y+zSquares*squareSize/2,0))
+        // corners.push(new THREE.Vector3(x-xSquares*squareSize/2,y-zSquares*squareSize/2,0))
+        // corners.push(new THREE.Vector3(x-xSquares*squareSize/2,y+zSquares*squareSize/2,0))
+        // corners.push(new THREE.Vector3(x+xSquares*squareSize/2,y-zSquares*squareSize/2,0))
+        // corners.push(new THREE.Vector3(x+xSquares*squareSize/2,y+zSquares*squareSize/2,0))
+
+        corners.push(new THREE.Vector3(-xSquares*squareSize/2,-zSquares*squareSize/2,0))
+        corners.push(new THREE.Vector3(-xSquares*squareSize/2,zSquares*squareSize/2,0))
+        corners.push(new THREE.Vector3(xSquares*squareSize/2,-zSquares*squareSize/2,0))
+        corners.push(new THREE.Vector3(xSquares*squareSize/2,zSquares*squareSize/2,0))
 
 
         // rotate plane
@@ -68,7 +73,7 @@ class Ground extends Group {
         for(let corner of corners){
             corner.applyAxisAngle(xAxis,xRotation);
             corner.applyAxisAngle(zAxis,zRotation);
-            quadBound.push(new THREE.Vector3(corner.x,0,corner.z));
+            quadBound.push(new THREE.Vector3(corner.x+x,0,corner.z+z));
         }
 
         this.triangleBounds = [];
