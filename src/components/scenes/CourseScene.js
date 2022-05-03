@@ -99,7 +99,12 @@ class CourseScene extends Scene {
         for (const main of mainList) {
             this.strokeCount = main.strokeCount;
             for (const col of collisionList) {
-                main.handleCollision(col);
+                if (col.index == 'plane') {
+                    main.handleCollision(col.obj);
+                }
+                else if (col.index == 'box') {
+                    main.handleBoxCollision(col.obj);
+                }
             }
         }
 
