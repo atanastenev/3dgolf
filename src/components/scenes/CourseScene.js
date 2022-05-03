@@ -25,7 +25,7 @@ class CourseScene extends Scene {
         this.background = new Color(0x7ec0ee);
 
         // golf ball
-        this.ball = new Ball(this, -2,2,2);
+        this.ball = new Ball(this, 0,2,0);
         // current floor with ugly texture lol
         // (x,y,z, xSquares,zSquares, xRotate, zRotate)
         const ground = new Ground(this, 0,0,0,     3,5,      -Math.PI*90/180,0,      1,1);
