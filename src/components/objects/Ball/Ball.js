@@ -159,7 +159,7 @@ class Ball extends Group {
         if(!this.isFalling && !this.isMoving && this.startTime === null){
             this.startTime = timeStamp;
         }
-        else if(this.isFalling || this.isMoving || this.ball.position.y < 0){
+        else if(this.isFalling || this.isMoving || this.ball.position.y < -0.5){
             this.startTime = null;
         }
         // both not moving and not falling for longer than 200ms
