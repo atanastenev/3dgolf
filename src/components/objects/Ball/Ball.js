@@ -313,7 +313,7 @@ class Ball extends Group {
                 this.velocity = new THREE.Vector3(this.velocity.x,0,this.velocity.z);
             }
             // factor of 100 should prob depend on the normal of the plane
-            else{
+            else if(!this.inHole){
                 // fix bounce, should bounce in direction of plane
                 this.velocity= new THREE.Vector3(this.velocity.x,this.velocity.y*-.7,this.velocity.z);
             }
