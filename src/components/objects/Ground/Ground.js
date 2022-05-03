@@ -87,7 +87,7 @@ class Ground extends Group {
             this.hole = new Hole(this,holeX,holeZ,xRotation,zRotation);
         }
 
-        parent.addToCollisionList(this);
+        parent.addToCollisionList({obj:this, index:'plane'});
     }
 }
 
