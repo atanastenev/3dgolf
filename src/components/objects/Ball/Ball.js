@@ -160,6 +160,7 @@ class Ball extends Group {
             this.startTime = timeStamp;
         }
         else if(this.isFalling || this.isMoving || this.ball.position.y < 0){
+            if(this.inHole) continue;
             this.startTime = null;
         }
         // both not moving and not falling for longer than 200ms
@@ -219,7 +220,11 @@ class Ball extends Group {
         for (const triangle of floor.triangleBounds) {
             outBounds = (outBounds || triangle.containsPoint(this.ball.position))
         }
-        if(!outBounds) return;
+        if(!outBounds){
+            return;
+        }
+
+
         // if(!floor.triangleBounds[0].containsPoint(this.ball.position) && !floor.triangleBounds[1].containsPoint(this.ball.position)){
         //     return;
         // }
@@ -227,6 +232,10 @@ class Ball extends Group {
         // use equation of a plane
         let d = floor.normal.dot(floor.mesh.position);
         let floorPosition = (d-(this.ball.position.x*floor.normal.x+this.ball.position.z*floor.normal.z))/floor.normal.y;
+
+        if(this.ball.position.y>floorPosition+this.radius*3){
+            return;
+        }
 
         // try to make hole test
         const EPShole = 0.001
