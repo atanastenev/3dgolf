@@ -12,6 +12,7 @@ import { CourseScene, CourseScene2, SeedScene } from 'scenes';
 import './instructions.css';
 import INSTRUCTION_HTML from './instructions.html';
 import CHANGELEVEL_HTML from './levelChange.html';
+import ENDGAME_HTML from './endGame.html';
 import './powerBar.css';
 import POWERBAR from './powerBar.html';
 
@@ -70,22 +71,31 @@ window.addEventListener('click', function () {
     hideInstructions()
 } );
 
-// // make the level chanage screen - don't append it yet to window
-let levelChangeContainer = document.createElement('div');
-levelChangeContainer.id = "levelChange-container";
-levelChangeContainer.innerHTML = CHANGELEVEL_HTML;
-levelChangeContainer.display = 'none';
-levelChangeContainer.opacity = '0';
-document.body.appendChild(levelChangeContainer);
-
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
 
+    // change scenes and display the level change instructions or the win game instructions
     if (scene[currlevel].getBallSuccess()){
-
-        document.getElementById('currlevel').innerHTML = currlevel+2;
-        currlevel++;
+        if (currlevel+1 < scene.length){
+            let levelChangeContainer1 = document.getElementById('instructions-container');
+            levelChangeContainer1.innerHTML = CHANGELEVEL_HTML;
+            levelChangeContainer1.style.display = 'block';
+            levelChangeContainer1.style.opacity = '1';
+            document.getElementById('currlevel').innerHTML = currlevel+2;
+            var stat = "stats_text";
+            if (currlevel > 0 ){
+                stat += currlevel+2;
+            }
+            document.body.removeChild(document.getElementById(stat));
+            currlevel++;
+        }
+        else{
+            let finishedGameDisplay = document.getElementById('instructions-container');
+            finishedGameDisplay.innerHTML = ENDGAME_HTML;
+            finishedGameDisplay.style.display = 'block';
+            finishedGameDisplay.style.opacity = '1';
+        }
     }
 
     var ballPos = scene[currlevel].update && scene[currlevel].update(timeStamp);
@@ -107,8 +117,8 @@ const windowResizeHandler = () => {
     camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
     // move the game stats as the window moves ... sometimes off with the height
-    document.getElementById('stats_text').style.top = 0.05 * innerHeight + 'px';
-    document.getElementById('stats_text').style.left = 0.05 * innerWidth + 'px';
+    // document.getElementById('stats_text').style.top = 0.05 * innerHeight + 'px';
+    // document.getElementById('stats_text').style.left = 0.05 * innerWidth + 'px';
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
@@ -123,13 +133,3 @@ function hideInstructions() {
         }, 2000)
     }
 }
-
-// function hideLevelChange() {
-//     let levelChangeContainer = document.getElementById('levelChange-container')
-//     if (instructionsContainer.style.display !== 'none') {
-//         instructionsContainer.style.opacity = '0'
-//         setTimeout(() => {
-//             instructionsContainer.style.display = 'none'
-//         }, 2000)
-//     }
-// }
