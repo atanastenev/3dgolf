@@ -28,16 +28,20 @@ class CourseScene2 extends Scene {
         this.ball = new Ball(this, -2,2,5);
         // current floor with ugly texture lol
         // (x,y,z, xSquares,zSquares, xRotate, zRotate)
-        const ground2 = new Ground(this, 2,0,5,     4,2,      -Math.PI*90/180,0);
-        const ground = new Ground(this, -2,0,2,     2,5,      -Math.PI*90/180,0,      -2,-1);
-        const box = new Box(this, 0,2,0);
+        // const ground2 = new Ground(this, 2,0,5,     4,2,      -Math.PI/2,0);
+        // const ground = new Ground(this, -2,0,2,     2,5,      -Math.PI/2,0,      -2,-1);
+        this.box1 = new Box(this, -.5,-3,1,     1,1,      -Math.PI/2,0);
+        this.box2 = new Box(this, -3.5,-3,1,     1,1,      -Math.PI/2,0);
+        this.ground = new Ground(this, -2,0,2,     3,7,      -Math.PI/2,0,      -2,-4);
+        // const box = new Box(this, -2,0,5);
         // idk why the shadows aren't working
         const lights = new BasicLights();
         // actually add to the scene
-        this.add(lights, this.ball.ball, this.ball.line, ground.mesh, ground2.mesh, box.mesh);
-        if(ground.hasHole){
-            this.add(ground.hole.circle, ground.hole.flagStick);
+        this.add(lights, this.ball.ball, this.ball.line, this.ground.mesh);
+        if(this.ground.hasHole){
+            this.add(this.ground.hole.circle, this.ground.hole.flagStick, this.ground.hole.flagFlag);
         }
+        this.add(this.box2.mesh, this.box1.mesh);
 
         // Populate GUI
         this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
@@ -100,7 +104,12 @@ class CourseScene2 extends Scene {
         for (const main of mainList) {
             this.strokeCount = main.strokeCount;
             for (const col of collisionList) {
-                main.handleCollision(col);
+                if (col.index == 'plane') {
+                    main.handleCollision(col.obj);
+                }
+                else if (col.index == 'box') {
+                    main.handleBoxCollision(col.obj);
+                }
             }
         }
 
