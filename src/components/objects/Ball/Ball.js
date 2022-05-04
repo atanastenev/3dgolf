@@ -215,27 +215,65 @@ class Ball extends Group {
 
     handleBoxCollision(box){
         const EPS = 0.001;
-        const checkEPS = 0.15;
+        const checkEPS = 0.1;
         let boundingBox = box.boundingBox.clone();
+        let boundingBoxSave = box.boundingBox.clone();
         boundingBox.expandByScalar(EPS);
+        boundingBox.expandByScalar(this.radius);
         let position = this.ball.position.clone();
-        console.log('ball before box');
-        console.log(position);
-        console.log(boundingBox.min);
-        console.log(boundingBox.max);
+        // console.log('ball before box');
+        // console.log(position);
+        // console.log(boundingBox.min);
+        // console.log(boundingBox.max);
         // console.log(-position.clone().z);
 
         if (boundingBox.min.x <= position.x && position.x <= boundingBox.max.x &&
         boundingBox.min.z <= position.z && position.z <= boundingBox.max.z) {
-            console.log('ball in box!');
+            //console.log('ball in box!');
             // console.log(position);
             // console.log(boundingBox.min);
             // console.log(boundingBox.max);
             let reflectVector = new THREE.Vector3(0,0,1);
-            if ((position.x <= boundingBox.min.x+checkEPS && position.x >= boundingBox.min.x-checkEPS) ||
-            (position.x <= boundingBox.max.x+checkEPS && position.x >= boundingBox.max.x-checkEPS)) {
+            let sideCheck = [];
+            let closestID = 2;
+            let minDist = Infinity;
+            sideCheck[0] = Math.abs(position.x - boundingBoxSave.min.x);
+            sideCheck[1] = Math.abs(position.x - boundingBoxSave.max.x);
+            sideCheck[2] = Math.abs(position.z - boundingBoxSave.min.z);
+            sideCheck[3] = Math.abs(position.z - boundingBoxSave.max.z);
+            for(let i = 0; i < sideCheck.length; i++){
+                // if(sideCheck[i] < minDist) {
+                //     minDist = sideCheck[i];
+                //     closestID = i;
+                // }
+                if(i >= 2 && sideCheck[i] >= minDist - checkEPS && sideCheck[i] <= minDist + checkEPS) {
+                    closestID = 5;
+                    console.log('corner');
+                }
+                else if(sideCheck[i] < minDist) {
+                    minDist = sideCheck[i];
+                    closestID = i;
+                }
+            }
+            if (closestID == 5) {
+                reflectVector = new THREE.Vector3(1,0,1);
+            }
+            else if(closestID == 0 || closestID == 1) {
                 reflectVector = new THREE.Vector3(1,0,0);
             }
+            else {
+                reflectVector = new THREE.Vector3(0,0,1);
+            }
+
+            // if ((position.x <= boundingBoxSave.min.x+checkEPS && position.x >= boundingBoxSave.min.x-checkEPS) ||
+            // (position.x <= boundingBoxSave.max.x+checkEPS && position.x >= boundingBoxSave.max.x-checkEPS)) {
+            //     reflectVector = new THREE.Vector3(1,0,0);
+
+            //     // if ((position.z <= boundingBox.min.z+checkEPS && position.z >= boundingBox.min.z-checkEPS) ||
+            //     // (position.z <= boundingBox.max.z+checkEPS && position.z >= boundingBox.max.z-checkEPS)) {
+            //     //     reflectVector = new THREE.Vector3(1,0,1);
+            //     // }
+            // }
             this.velocity.reflect(reflectVector);
             return;
         }
