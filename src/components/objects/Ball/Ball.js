@@ -215,32 +215,29 @@ class Ball extends Group {
 
     handleBoxCollision(box){
         const EPS = 0.001;
+        const checkEPS = 0.15;
         let boundingBox = box.boundingBox.clone();
         boundingBox.expandByScalar(EPS);
         let position = this.ball.position.clone();
-        let reflectPos = new THREE.Vector3(0,0,0);
         console.log('ball before box');
         console.log(position);
         console.log(boundingBox.min);
         console.log(boundingBox.max);
+        // console.log(-position.clone().z);
 
-        if (boundingBox.min.x <= position.clone().x <= boundingBox.max.x &&
-        boundingBox.min.y <= position.clone().y <= boundingBox.max.y) {
-            console.log('ball in box!')
-            // let minDist = ;
-            if (boundingBox.min.x < position.clone().x < boundingBox.max.x) {
-                reflectPos.x = 1;
+        if (boundingBox.min.x <= position.x && position.x <= boundingBox.max.x &&
+        boundingBox.min.z <= position.z && position.z <= boundingBox.max.z) {
+            console.log('ball in box!');
+            // console.log(position);
+            // console.log(boundingBox.min);
+            // console.log(boundingBox.max);
+            let reflectVector = new THREE.Vector3(0,0,1);
+            if ((position.x <= boundingBox.min.x+checkEPS && position.x >= boundingBox.min.x-checkEPS) ||
+            (position.x <= boundingBox.max.x+checkEPS && position.x >= boundingBox.max.x-checkEPS)) {
+                reflectVector = new THREE.Vector3(1,0,0);
             }
-            if (boundingBox.min.z < position.clone().z < boundingBox.max.z) {
-                reflectPos.z = 1;
-            }
-            let dotprod = reflectPos.clone().dot(this.ball.position)
-            let reflectVector = reflectPos.clone().multiplyScalar(dotprod);
-            reflectVector.multiplyScalar(2).sub(this.ball.position);
-            // // let reflectVector = reflectPos.clone().sub(this.ball.position).normalize();
-            //this.velocity.reflect(reflectVector);
-            this.velocity= new THREE.Vector3(-this.velocity.x,this.velocity.y,-this.velocity.z);
-            //this.velocity = new THREE.Vector3(0,0,0);
+            this.velocity.reflect(reflectVector);
+            return;
         }
         else {
             return;
