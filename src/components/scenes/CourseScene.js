@@ -70,7 +70,7 @@ class CourseScene extends Scene {
 
     makeGui() {
         this.state.gui = new Dat.GUI();
-        let background = this.state.gui.addFolder('BACKGROUND');
+        let background = this.state.gui.addFolder('OPTIONS');
         background.add(this.state, 'backgroundTexture', ['Blue', 'Space', 'Sunset', 'Ocean']).name('Background Texture').onChange(() => this.updateBackgroundTexture());
         background.open();
     }
