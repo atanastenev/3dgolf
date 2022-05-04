@@ -279,7 +279,7 @@ class Ball extends Group {
                 else if (this.inHole){
                     this.inHole = false;
                     let reflectVector = floor.hole.circle.position.clone().sub(this.ball.position).normalize();
-                    this.velocity.reflect(reflectVector);
+                    this.velocity.reflect(reflectVector).multiplyScalar(.7);
                 }
             }
             else{

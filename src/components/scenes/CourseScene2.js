@@ -4,6 +4,9 @@ import { Scene, Color } from 'three';
 // remove flower and land
 import { Ball, Ground, Box } from 'objects';
 import { BasicLights } from 'lights';
+import SPACE from '../textures/space.jpeg';
+import SUNSET from '../textures/sunset.jpeg';
+import OCEAN from '../textures/ocean.jpeg';
 
 class CourseScene2 extends Scene {
     constructor(level) {
@@ -14,8 +17,8 @@ class CourseScene2 extends Scene {
 
         // Init state
         this.state = {
-            gui: new Dat.GUI(), // Create GUI for scene
-            rotationSpeed: 1,
+            gui: null, // Create GUI for scene
+            backgroundTexture: 'Blue',
             updateList: [],
             mainList: [],
             collisionList: [],
@@ -43,7 +46,7 @@ class CourseScene2 extends Scene {
         this.add(this.box2.mesh, this.box1.mesh);
 
         // Populate GUI
-        this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
+        // this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
 
         // stuff for stroke count and level
         // adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js
@@ -67,6 +70,13 @@ class CourseScene2 extends Scene {
         document.body.appendChild(this.stats_text);
     }
 
+    makeGui() {
+        this.state.gui = new Dat.GUI();
+        let background = this.state.gui.addFolder('BACKGROUND');
+        background.add(this.state, 'backgroundTexture', ['Blue', 'Space', 'Sunset', 'Ocean']).name('Background Texture').onChange(() => this.updateBackgroundTexture());
+        background.open();
+    }
+
     addToUpdateList(object) {
         this.state.updateList.push(object);
     }
@@ -81,6 +91,39 @@ class CourseScene2 extends Scene {
 
     getBallSuccess(){
         return this.ball.getSuccess();
+    }
+
+    // adapted from https://github.com/dreamworld-426/dreamworld/blob/master/src/components/scenes/SeedScene/SeedScene.js
+    updateBackgroundTexture(){
+        if (this.state.backgroundTexture == 'Blue') {
+            this.background = new Color(0x7ec0ee);
+        }
+        else if (this.state.backgroundTexture == 'Space') {
+            let texture  = new THREE.TextureLoader().load(SPACE);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            this.background = texture;
+            // this.fog = new THREE.Fog(0xA36DA1, 500, 1000);
+            // this.background = new Color(0xffc0ee); 
+    
+        }
+        else if (this.state.backgroundTexture == 'Sunset') {
+            let texture  = new THREE.TextureLoader().load(SUNSET);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            this.background = texture;
+            // this.fog = new THREE.Fog(0xA36DA1, 500, 1000);
+            // this.background = new Color(0x7effee); 
+        }
+        else if (this.state.backgroundTexture == 'Ocean') {
+            var texture  = new THREE.TextureLoader().load(OCEAN);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            this.background = texture;
+            // this.fog = new THREE.Fog(0xA36DA1, 500, 1000);
+            // this.background = new Color(0x7ec0ff); 
+    
+        }
     }
 
     update(timeStamp) {

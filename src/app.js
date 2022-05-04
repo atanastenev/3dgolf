@@ -77,7 +77,9 @@ const onAnimationFrameHandler = (timeStamp) => {
 
     // change scenes and display the level change instructions or the win game instructions
     if (scene[currlevel].getBallSuccess()){
+        scene[currlevel].state.gui.destroy();
         if (currlevel+1 < scene.length){
+            scene[currlevel+1].makeGui();
             let levelChangeContainer1 = document.getElementById('instructions-container');
             levelChangeContainer1.innerHTML = CHANGELEVEL_HTML;
             levelChangeContainer1.style.display = 'block';
