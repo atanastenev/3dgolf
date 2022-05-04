@@ -25,13 +25,12 @@ class CourseScene2 extends Scene {
         this.background = new Color(0x7ec0ee);
 
         // golf ball
-        this.ball = new Ball(this, -2,2,5);
-        // current floor with ugly texture lol
+        this.ball = new Ball(this, -2,2,8);
+
+        // (x,y,z, xSquares,zSquares)
+        this.box1 = new Box(this, -0.5,1,2,     1,1);
+        this.box2 = new Box(this, -3.5,1,2,     1,1);
         // (x,y,z, xSquares,zSquares, xRotate, zRotate)
-        // const ground2 = new Ground(this, 2,0,5,     4,2,      -Math.PI/2,0);
-        // const ground = new Ground(this, -2,0,2,     2,5,      -Math.PI/2,0,      -2,-1);
-        this.box1 = new Box(this, -.5,-3,1,     1,1,      -Math.PI/2,0);
-        this.box2 = new Box(this, -3.5,-3,1,     1,1,      -Math.PI/2,0);
         this.ground = new Ground(this, -2,0,2,     3,7,      -Math.PI/2,0,      -2,-4);
         // const box = new Box(this, -2,0,5);
         // idk why the shadows aren't working
