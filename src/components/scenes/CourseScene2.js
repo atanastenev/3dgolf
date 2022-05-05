@@ -4,9 +4,6 @@ import { Scene, Color } from 'three';
 // remove flower and land
 import { Ball, Ground, Box } from 'objects';
 import { BasicLights } from 'lights';
-import SPACE from '../textures/space.jpeg';
-import SUNSET from '../textures/sunset.jpeg';
-import OCEAN from '../textures/ocean.jpeg';
 
 class CourseScene2 extends Scene {
     constructor(level) {
@@ -17,8 +14,8 @@ class CourseScene2 extends Scene {
 
         // Init state
         this.state = {
-            gui: null, // Create GUI for scene
-            backgroundTexture: 'Blue',
+            gui: new Dat.GUI(), // Create GUI for scene
+            rotationSpeed: 1,
             updateList: [],
             mainList: [],
             collisionList: [],
@@ -28,11 +25,11 @@ class CourseScene2 extends Scene {
         this.background = new Color(0x7ec0ee);
 
         // golf ball
-        this.ball = new Ball(this, -2,2,8);
+        this.ball = new Ball(this, 0,2,7);
 
         // (x,y,z, xSquares,zSquares)
-        this.box1 = new Box(this, -0.5,1,2,     1,1);
-        this.box2 = new Box(this, -3.5,1,2,     1,1);
+        this.box1 = new Box(this, -0,1,2,     1,1);
+        this.box2 = new Box(this, -4,1,2,     1,1);
         // (x,y,z, xSquares,zSquares, xRotate, zRotate)
         this.ground = new Ground(this, -2,0,2,     3,7,      -Math.PI/2,0,      -2,-4);
         // const box = new Box(this, -2,0,5);
@@ -42,12 +39,11 @@ class CourseScene2 extends Scene {
         this.add(lights, this.ball.ball, this.ball.line, this.ground.mesh);
         if(this.ground.hasHole){
             this.add(this.ground.hole.circle, this.ground.hole.flagStick, this.ground.hole.flagFlag);
-            this.holeGround = this.ground;
         }
         this.add(this.box2.mesh, this.box1.mesh);
 
         // Populate GUI
-        // this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
+        this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
 
         // stuff for stroke count and level
         // adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js
@@ -71,7 +67,6 @@ class CourseScene2 extends Scene {
         document.body.appendChild(this.stats_text);
     }
 
-
     addToUpdateList(object) {
         this.state.updateList.push(object);
     }
@@ -86,39 +81,6 @@ class CourseScene2 extends Scene {
 
     getBallSuccess(){
         return this.ball.getSuccess();
-    }
-
-    // adapted from https://github.com/dreamworld-426/dreamworld/blob/master/src/components/scenes/SeedScene/SeedScene.js
-    updateBackgroundTexture(value){
-        if (value == 'Blue') {
-            this.background = new Color(0x7ec0ee);
-        }
-        else if (value == 'Space') {
-            let texture  = new THREE.TextureLoader().load(SPACE);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            this.background = texture;
-            // this.fog = new THREE.Fog(0xA36DA1, 500, 1000);
-            // this.background = new Color(0xffc0ee); 
-    
-        }
-        else if (value == 'Sunset') {
-            let texture  = new THREE.TextureLoader().load(SUNSET);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            this.background = texture;
-            // this.fog = new THREE.Fog(0xA36DA1, 500, 1000);
-            // this.background = new Color(0x7effee); 
-        }
-        else if (value == 'Ocean') {
-            var texture  = new THREE.TextureLoader().load(OCEAN);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            this.background = texture;
-            // this.fog = new THREE.Fog(0xA36DA1, 500, 1000);
-            // this.background = new Color(0x7ec0ff); 
-    
-        }
     }
 
     update(timeStamp) {
