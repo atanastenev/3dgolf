@@ -1,4 +1,4 @@
-import { Group } from 'three';
+import { Group, Color } from 'three';
 import * as THREE from 'three';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 
@@ -7,6 +7,8 @@ class Ball extends Group {
     constructor(parent, x, y, z) {
         // Call parent Group() constructor
         super();
+
+        this.state = {ballColor: 0xff0000, lineColor: 0x000000}
 
         // name? idk what for
         this.name = 'Ball';
@@ -18,7 +20,7 @@ class Ball extends Group {
         // create sphere
         let ballGeometry = new THREE.SphereGeometry(this.radius, 20, 20);
         let ballMaterial = new THREE.MeshPhongMaterial({
-            color: 0xff0000,
+            color: this.state.ballColor,
             side: THREE.DoubleSide,
             transparent: false,
         });
@@ -61,7 +63,7 @@ class Ball extends Group {
             true    // closed
           );
         let lineMaterial = new THREE.LineBasicMaterial( {
-             color: 0xff00ff,
+             color: this.state.lineColor,
              transparent: true,
              opacity: 0
         } );
@@ -98,7 +100,20 @@ class Ball extends Group {
             }
         })
 
+        // GUI adapted from https://github.com/dreamworld-426/dreamworld/blob/master/src/components/objects/ChunkManager/ChunkManager.js
+        if(parent.state.gui !=null){
+            let folder = parent.state.gui.addFolder('BALL');
+            folder.addColor(this.state, 'ballColor').name("Ball Color").onChange(() => this.updateColor());
+            folder.addColor(this.state, 'lineColor').name("Line Color").onChange(() => this.updateColor());
+            folder.open();
+        }
+        
+    }
 
+    updateColor() {
+        // let hex = "0x"+this.state.color.toString(16);
+        this.ball.material.color = new Color(this.state.ballColor);
+        this.line.material.color = new Color(this.state.lineColor);
     }
 
     update(timeStamp) {
