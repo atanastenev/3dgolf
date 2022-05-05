@@ -29,7 +29,7 @@ const renderer = new WebGLRenderer({ antialias: true });
 
 
 // create GUI
-var state = {backgroundTexture: 'Blue',ballColor: 0xff0000, lineColor: 0x000000, flagColor: 0xff0000}
+var state = {backgroundTexture: 'Blue',ballColor: 0xff0000, lineColor: 0x000000, flagColor: 0xff0000, music: false};
 
 state.gui = new Dat.GUI();
 let background = state.gui.addFolder('OPTIONS');
@@ -100,6 +100,17 @@ audioLoader.load( MUSIC , function( buffer ) {
 	sound.setVolume( 0.1 );
 	sound.play();
 });
+
+// gui toggle to pause music
+let musicpause = state.gui.addFolder('MUSIC');
+musicpause.add(state, 'music').name('Music Pause').onChange(() => {
+    if (state.music){
+        sound.pause();
+    }else {
+        sound.play();
+    }
+});
+musicpause.open();
 
 // add a toggle to turn off music??
 
