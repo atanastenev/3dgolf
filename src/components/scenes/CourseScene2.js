@@ -42,6 +42,7 @@ class CourseScene2 extends Scene {
         this.add(lights, this.ball.ball, this.ball.line, this.ground.mesh);
         if(this.ground.hasHole){
             this.add(this.ground.hole.circle, this.ground.hole.flagStick, this.ground.hole.flagFlag);
+            this.holeGround = this.ground;
         }
         this.add(this.box2.mesh, this.box1.mesh);
 

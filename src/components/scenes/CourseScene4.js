@@ -48,6 +48,7 @@ class CourseScene4 extends Scene {
             this.add(ground.mesh)
             if(ground.hasHole){
                 this.add(ground.hole.circle, ground.hole.flagStick, ground.hole.flagFlag);
+                this.holeGround = ground;
             }
         }
 

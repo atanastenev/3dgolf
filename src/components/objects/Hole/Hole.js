@@ -1,4 +1,4 @@
-import { Group } from 'three';
+import { Group, Color } from 'three';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
@@ -63,6 +63,10 @@ class Hole extends Group {
         this.flagFlag = new THREE.Line(flagGeometry, flagMaterial);
 
 
+    }
+
+    updateColor(flagColor) {
+        this.flagFlag.material.color = new Color(flagColor);
     }
 }
 

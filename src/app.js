@@ -24,7 +24,7 @@ const renderer = new WebGLRenderer({ antialias: true });
 
 
 // create GUI
-var state = {backgroundTexture: 'Blue',ballColor: 0xff0000, lineColor: 0x000000}
+var state = {backgroundTexture: 'Blue',ballColor: 0xff0000, lineColor: 0x000000, flagColor: 0xff0000}
 
 state.gui = new Dat.GUI();
 let background = state.gui.addFolder('OPTIONS');
@@ -35,7 +35,7 @@ background.add(state, 'backgroundTexture', ['Blue', 'Space', 'Sunset', 'Ocean'])
 });
 background.open();
 
-let folder = state.gui.addFolder('BALL');
+let folder = state.gui.addFolder('COLOR');
 folder.addColor(state, 'ballColor').name("Ball Color").onChange(() =>{
     for(const currScene of scene){
         currScene.ball.updateColor(state.ballColor,state.lineColor);
@@ -44,6 +44,11 @@ folder.addColor(state, 'ballColor').name("Ball Color").onChange(() =>{
 folder.addColor(state, 'lineColor').name("Line Color").onChange(() =>{
     for(const currScene of scene){
         currScene.ball.updateColor(state.ballColor,state.lineColor);
+    }
+});
+folder.addColor(state, 'flagColor').name("Flag Color").onChange(() =>{
+    for(const currScene of scene){
+        currScene.holeGround.hole.updateColor(state.flagColor);
     }
 });
 folder.open();

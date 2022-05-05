@@ -48,11 +48,10 @@ class CourseScene3 extends Scene {
             this.add(ground.mesh)
             if(ground.hasHole){
                 this.add(ground.hole.circle, ground.hole.flagStick, ground.hole.flagFlag);
+                this.holeGround = ground;
             }
         }
 
-        // Populate GUI
-        // this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
 
         // stuff for stroke count and level
         // adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js
