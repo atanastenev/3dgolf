@@ -15,11 +15,39 @@ import CHANGELEVEL_HTML from './levelChange.html';
 import ENDGAME_HTML from './endGame.html';
 import './powerBar.css';
 import POWERBAR from './powerBar.html';
+import * as Dat from 'dat.gui';
 
 // Initialize core ThreeJS components
 var scene = [new CourseScene(1), new CourseScene2(2), new CourseScene3(3), new CourseScene4(4)];
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
+
+
+// create GUI
+var state = {backgroundTexture: 'Blue',ballColor: 0xff0000, lineColor: 0x000000}
+
+state.gui = new Dat.GUI();
+let background = state.gui.addFolder('OPTIONS');
+background.add(state, 'backgroundTexture', ['Blue', 'Space', 'Sunset', 'Ocean']).name('Background Texture').onChange(() => {
+    for(const currScene of scene){
+        currScene.updateBackgroundTexture(state.backgroundTexture)
+    }
+});
+background.open();
+
+let folder = state.gui.addFolder('BALL');
+folder.addColor(state, 'ballColor').name("Ball Color").onChange(() =>{
+    for(const currScene of scene){
+        currScene.ball.updateColor(state.ballColor,state.lineColor);
+    }
+});
+folder.addColor(state, 'lineColor').name("Line Color").onChange(() =>{
+    for(const currScene of scene){
+        currScene.ball.updateColor(state.ballColor,state.lineColor);
+    }
+});
+folder.open();
+/* END GUI*/
 
 // variables
 let currlevel = 0;
@@ -77,9 +105,9 @@ const onAnimationFrameHandler = (timeStamp) => {
 
     // change scenes and display the level change instructions or the win game instructions
     if (scene[currlevel].getBallSuccess()){
-        scene[currlevel].state.gui.destroy();
+
         if (currlevel+1 < scene.length){
-            scene[currlevel+1].makeGui();
+
             let levelChangeContainer1 = document.getElementById('instructions-container');
             levelChangeContainer1.innerHTML = CHANGELEVEL_HTML;
             levelChangeContainer1.style.display = 'block';

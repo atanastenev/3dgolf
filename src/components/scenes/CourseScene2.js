@@ -70,12 +70,6 @@ class CourseScene2 extends Scene {
         document.body.appendChild(this.stats_text);
     }
 
-    makeGui() {
-        this.state.gui = new Dat.GUI();
-        let background = this.state.gui.addFolder('OPTIONS');
-        background.add(this.state, 'backgroundTexture', ['Blue', 'Space', 'Sunset', 'Ocean']).name('Background Texture').onChange(() => this.updateBackgroundTexture());
-        background.open();
-    }
 
     addToUpdateList(object) {
         this.state.updateList.push(object);
@@ -94,11 +88,11 @@ class CourseScene2 extends Scene {
     }
 
     // adapted from https://github.com/dreamworld-426/dreamworld/blob/master/src/components/scenes/SeedScene/SeedScene.js
-    updateBackgroundTexture(){
-        if (this.state.backgroundTexture == 'Blue') {
+    updateBackgroundTexture(value){
+        if (value == 'Blue') {
             this.background = new Color(0x7ec0ee);
         }
-        else if (this.state.backgroundTexture == 'Space') {
+        else if (value == 'Space') {
             let texture  = new THREE.TextureLoader().load(SPACE);
             texture.wrapS = THREE.RepeatWrapping;
             texture.wrapT = THREE.RepeatWrapping;
@@ -107,7 +101,7 @@ class CourseScene2 extends Scene {
             // this.background = new Color(0xffc0ee); 
     
         }
-        else if (this.state.backgroundTexture == 'Sunset') {
+        else if (value == 'Sunset') {
             let texture  = new THREE.TextureLoader().load(SUNSET);
             texture.wrapS = THREE.RepeatWrapping;
             texture.wrapT = THREE.RepeatWrapping;
@@ -115,7 +109,7 @@ class CourseScene2 extends Scene {
             // this.fog = new THREE.Fog(0xA36DA1, 500, 1000);
             // this.background = new Color(0x7effee); 
         }
-        else if (this.state.backgroundTexture == 'Ocean') {
+        else if (value == 'Ocean') {
             var texture  = new THREE.TextureLoader().load(OCEAN);
             texture.wrapS = THREE.RepeatWrapping;
             texture.wrapT = THREE.RepeatWrapping;
