@@ -56,14 +56,15 @@ class CourseScene extends Scene {
         
         this.stats_text = document.createElement('div');
         this.stats_text.style.position = 'absolute';
-        this.stats_text.style.width = 100;
-        this.stats_text.style.height = 100;
+        this.stats_text.style.width = 110;
+        this.stats_text.style.height = 110;
         this.stats_text.style.top = 0.05 * HEIGHT + 'px';
         this.stats_text.style.left = 0.05 * WIDTH + 'px';
         this.stats_text.style.fontFamily = 'Poppins, sans-serif';
         this.stats_text.style.fontSize = 0.015 * WIDTH + 'px';
-        this.stats_text.style.color = "#000000";
-        this.stats_text.id = "stats_text"
+        this.stats_text.style.color = "#FFFFFF";
+        this.stats_text.style.backgroundColor = "#000100";
+        this.stats_text.id = "stats_text";
         document.body.appendChild(this.stats_text);
 
     }
@@ -82,6 +83,10 @@ class CourseScene extends Scene {
 
     getBallSuccess(){
         return this.ball.getSuccess();
+    }
+
+    getShotCount(){
+        return this.strokeCount;
     }
 
     // adapted from https://github.com/dreamworld-426/dreamworld/blob/master/src/components/scenes/SeedScene/SeedScene.js
@@ -146,7 +151,7 @@ class CourseScene extends Scene {
             }
         }
 
-        this.stats_text.innerHTML = "Shots: " + this.strokeCount + "<br>" + "Level: " + this.level;
+        this.stats_text.innerHTML = "Shots: " + this.strokeCount + "<br>" + "Level: " + this.level + " ";
 
         document.body.appendChild(this.stats_text);
 

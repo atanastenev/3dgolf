@@ -6,7 +6,7 @@
  * handles window resizes.
  *
  */
-import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
+import { WebGLRenderer, PerspectiveCamera, Vector3, Audio, AudioListener,  AudioLoader} from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { CourseScene, CourseScene2, CourseScene3, CourseScene4 } from 'scenes';
 import './instructions.css';
@@ -15,7 +15,12 @@ import CHANGELEVEL_HTML from './levelChange.html';
 import ENDGAME_HTML from './endGame.html';
 import './powerBar.css';
 import POWERBAR from './powerBar.html';
+import MUSIC from './background.mp3';
 import * as Dat from 'dat.gui';
+
+// window dimensions
+let WIDTH = window.innerWidth;
+let HEIGHT = window.innerHeight;
 
 // Initialize core ThreeJS components
 var scene = [new CourseScene(1), new CourseScene2(2), new CourseScene3(3), new CourseScene4(4)];
@@ -30,7 +35,7 @@ state.gui = new Dat.GUI();
 let background = state.gui.addFolder('OPTIONS');
 background.add(state, 'backgroundTexture', ['Blue', 'Space', 'Sunset', 'Ocean']).name('Background Texture').onChange(() => {
     for(const currScene of scene){
-        currScene.updateBackgroundTexture(state.backgroundTexture)
+        currScene.updateBackgroundTexture(state.backgroundTexture);
     }
 });
 background.open();
@@ -79,6 +84,25 @@ controls.maxDistance = 13;
 controls.maxPolarAngle = Math.PI/2.5;
 controls.update();
 
+// Adding Background Audio for the Game: https://threejs.org/docs/#api/en/audio/Audio
+// create an AudioListener and add it to the camera
+const listener = new AudioListener();
+camera.add( listener );
+
+// create a global audio source
+const sound = new Audio( listener );
+
+// load a sound and set it as the Audio object's buffer
+const audioLoader = new AudioLoader();
+audioLoader.load( MUSIC , function( buffer ) {
+	sound.setBuffer( buffer );
+	sound.setLoop( true );
+	sound.setVolume( 0.1 );
+	sound.play();
+});
+
+// add a toggle to turn off music??
+
 /************* NOT USED? ******************/ 
 // display number of shots and level
 // adapted from: https://github.com/cz10/thecakerybakery/blob/main/src/app.js
@@ -89,6 +113,21 @@ powerBar.innerHTML = "POWER BAR"
 powerBar.innerHTML = POWERBAR;
 document.body.appendChild(powerBar);
 
+// power bar text display
+let powerBartxt = document.createElement('div');
+powerBartxt.style.position = 'absolute';
+powerBartxt.style.width = 110;
+powerBartxt.style.height = 110;
+powerBartxt.style.top = 0.475 * HEIGHT + 'px';
+powerBartxt.style.left = 0.925 * WIDTH + 'px';
+powerBartxt.style.fontFamily = 'Poppins, sans-serif';
+powerBartxt.style.fontSize = 0.015 * WIDTH + 'px';
+powerBartxt.style.textAlign = "center";
+powerBartxt.style.color = "#FFFFFF";
+powerBartxt.style.backgroundColor = "#000100";
+powerBartxt.id = "powerbartxt";
+powerBartxt.innerHTML = "Power <br> Bar";
+document.body.appendChild(powerBartxt);
 
 // ideas from https://github.com/mrdoob/three.js/blob/master/examples/misc_controls_pointerlock.html
 // https://github.com/karenying/drivers-ed/blob/master/src/app.js
@@ -96,7 +135,6 @@ let instructionsContainer = document.createElement('div');
 instructionsContainer.id = 'instructions-container';
 instructionsContainer.innerHTML = INSTRUCTION_HTML;
 document.body.appendChild(instructionsContainer);
-
 
 
 // hide instruction on mouseclick
@@ -118,6 +156,11 @@ const onAnimationFrameHandler = (timeStamp) => {
             levelChangeContainer1.style.display = 'block';
             levelChangeContainer1.style.opacity = '1';
             document.getElementById('currlevel').innerHTML = currlevel+2;
+            for(let i = 0; i < currlevel+1; i++ ){
+                let scoreforlevel = scene[i].getShotCount();
+                let scorelabel = "scorecourse" + (i+1);
+                document.getElementById(scorelabel).innerHTML = scoreforlevel;
+            }
             var stat = "stats_text";
             if (currlevel > 0 ){
                 stat += currlevel+1;
@@ -128,6 +171,12 @@ const onAnimationFrameHandler = (timeStamp) => {
         else{
             let finishedGameDisplay = document.getElementById('instructions-container');
             finishedGameDisplay.innerHTML = ENDGAME_HTML;
+            for(let i = 0; i < currlevel+1; i++ ){
+                let scoreforlevel = scene[i].getShotCount();
+                let scorelabel = "scorecourse" + (i+1);
+                console.log(scorelabel);
+                document.getElementById(scorelabel).innerHTML = scoreforlevel;
+            }
             finishedGameDisplay.style.display = 'block';
             finishedGameDisplay.style.opacity = '1';
         }
@@ -152,8 +201,8 @@ const windowResizeHandler = () => {
     camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
     // move the game stats as the window moves ... sometimes off with the height
-    // document.getElementById('stats_text').style.top = 0.05 * innerHeight + 'px';
-    // document.getElementById('stats_text').style.left = 0.05 * innerWidth + 'px';
+    document.getElementById('powerbartxt').style.top = 0.475 * innerHeight + 'px';
+    document.getElementById('powerbartxt').style.left = 0.925 * innerWidth + 'px';
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
