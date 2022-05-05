@@ -278,7 +278,7 @@ class Ball extends Group {
             //     //     reflectVector = new THREE.Vector3(1,0,1);
             //     // }
             // }
-            this.velocity.reflect(reflectVector);
+            this.velocity.reflect(reflectVector).multiplyScalar(.5);
             return;
         }
         else {
